@@ -33,29 +33,43 @@ who loves three cards wants the other 35 pages.
 
 ### Structure
 
-Single page, four movements:
+Single page, built around one passage at a time:
 
 | Section | Job |
 |---|---|
-| Hero | Set the tone in three seconds. Cover typography, the opening stanza, one CTA down to the quotes. |
-| **Quotes** | The site. 59 cards, filterable by poem and by theme (grief, love, hope, freedom, forgiveness, renewal), plus search and a "Surprise me" button. |
+| **The stage** | The site. One randomly drawn passage, rendered as the actual share card. "Another passage" draws the next. Share actions sit right under it. |
+| The library | Behind a "See all 59 passages" link. The filterable grid, for people hunting a specific line. Hidden by default. |
 | The book | Cover, blurb, buy links. FriesenPress first — it pays you most. |
 | About | Your bio, briefly. |
 
-One page because 59 quotes don't justify navigation, and every extra click is a
-place to lose someone.
+**Why one at a time.** A grid of 59 asks the reader to choose, and choosing is
+work — most people skim a wall of stanzas and take none of them. A single
+passage asks nothing. You read four lines, and either they land or you tap for
+another. It turns browsing into something closer to how poetry actually reaches
+people: one thing at a time, unhurried, until one of them stops you.
+
+It also makes the site re-visitable. A grid is exhausted in one sitting; a draw
+is different every time you open it.
 
 ### The share flow
 
-Tap a card → a dialog renders a real image on a `<canvas>`:
+**What you see is the image you'd send.** The passage on screen isn't styled
+HTML that later becomes a card — it *is* the `<canvas>` card, rendered live. No
+dialog, no preview step. Share, Download, Copy act on exactly what's in front of
+you.
 
-- **Three shapes** — Square (Instagram feed), Story (9:16, Instagram/WhatsApp status), Wide (1200×630, link previews).
+- **Three shapes**, under "Card options" — Square (Instagram feed), Story (9:16, status), Wide (1200×630, link previews).
 - **Two colourways** — Ink (the cover's black) and Cream (reads better in a light feed).
-- **Four exits** — Download image, native Share sheet (mobile, shares the actual PNG), Copy text, Copy link.
+- **Four exits** — Download, native Share sheet (mobile, shares the real PNG), Copy text, Copy link.
 
-Rendering happens in the browser. No server, no image API, no cost, works
-offline once loaded, and there's no upload step between wanting to share and
-sharing.
+Rendering happens in the browser. No server, no image API, no cost, and no
+upload step between wanting to share and sharing.
+
+**Drawing without repeats.** The refresh deals from a shuffled deck rather than
+picking at random, reshuffling only when all 59 are spent. True random repeats
+often enough to feel broken — you press "Another" and get the same lines back,
+and the site looks lazy. Verified over 400 draws: every passage shown, no
+passage ever twice in a row.
 
 Every quote also gets a real URL (`/q/wlng-1/`) generated at build time, with
 the words in its OpenGraph tags — so pasting a link into Messages or Slack

@@ -2,8 +2,9 @@
 
 Promo site for **I came to be free** — poems by PJ Starling (FriesenPress, 2026).
 
-The site's one job: let a reader turn any passage into a shareable image card in
-a few taps. See [PLAN.md](PLAN.md) for the reasoning behind every choice here.
+The site shows **one passage at a time**, rendered as the actual share card you'd
+send. "Another passage" draws the next. The full library of 59 sits behind a
+link. See [PLAN.md](PLAN.md) for the reasoning behind every choice here.
 
 ## Run it locally
 
@@ -54,7 +55,7 @@ it's unreadable on a phone. `check.py` warns you.
 ```
 index.html            the whole site
 assets/site.css       styles
-assets/site.js        filtering, dialog, share actions
+assets/site.js        the draw deck, the stage, the library, share actions
 assets/card.js        canvas card renderer (no DOM deps — testable on its own)
 assets/cover.jpg      front cover, cropped from the FriesenPress print PDF
 assets/og-default.png 1200×630 link preview image
@@ -136,6 +137,11 @@ automatically — nothing breaks, the URLs just change.
 
 - **The canvas needs the webfont loaded** before it draws, or cards silently
   render in Times. `site.js` waits on `document.fonts.ready` — don't remove that.
+
+- **"Another passage" deals from a shuffled deck**, it doesn't pick at random.
+  Random repeats often enough to look broken. The deck reshuffles only when all
+  59 are spent, and guards against the reshuffle repeating the passage still on
+  screen. If you change this, keep both properties.
 - **Card layout auto-fits**: `card.js` shrinks the type until the block fits both
   axes. Long lines therefore make *everything* smaller, not just that line.
 - **OG images are one shared image**, not per-quote — the quote text itself is in

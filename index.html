@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>I came to be free — Poems by PJ Starling</title>
-<meta name="description" content="Poems on grief, love, and renewal by PJ Starling. Find a line that speaks to you, and share it.">
+<meta name="description" content="Poems on grief, love, and renewal by PJ Starling. A line at a time — take the one that's yours and share it.">
 <link rel="canonical" href="__BASE__/">
 <meta property="og:type" content="book">
 <meta property="og:site_name" content="I came to be free">
 <meta property="og:title" content="I came to be free — Poems by PJ Starling">
-<meta property="og:description" content="Poems on grief, love, and renewal. Find a line that speaks to you, and share it.">
+<meta property="og:description" content="Poems on grief, love, and renewal. A line at a time — take the one that's yours and share it.">
 <meta property="og:image" content="__BASE__/assets/og-default.png">
 <meta property="og:url" content="__BASE__/">
 <meta name="twitter:card" content="summary_large_image">
@@ -19,12 +19,11 @@
 <link rel="stylesheet" href="assets/site.css">
 </head>
 <body>
-<a class="skip" href="#quotes">Skip to quotes</a>
+<a class="skip" href="#stage">Skip to the poem</a>
 
 <header class="site-head">
   <a class="brand" href="#top">I&nbsp;came&nbsp;to&nbsp;be&nbsp;free</a>
   <nav>
-    <a href="#quotes">Quotes</a>
     <a href="#book">The&nbsp;book</a>
     <a href="#about">About</a>
     <a class="btn-ghost" href="https://books.friesenpress.com/store/title/119734000577049719/PJ-Starling-I-came-to-be-free" target="_blank" rel="noopener">Buy</a>
@@ -33,36 +32,57 @@
 
 <main id="top">
 
-  <section class="hero">
-    <div class="hero-chain" aria-hidden="true"></div>
-    <p class="hero-eyebrow">Poems on grief, love, and renewal</p>
-    <h1 class="hero-title" aria-label="I came to be free">
-      <span>I</span>
-      <span>came</span>
-      <span>to</span>
-      <span>be</span>
-      <span>free</span>
-    </h1>
-    <p class="hero-author">PJ Starling</p>
-    <blockquote class="hero-quote">
-      <p>Motherless baby<br>Fatherless son<br>A spark in the void<br>Where once there was none&nbsp;…</p>
-    </blockquote>
-    <div class="hero-actions">
-      <a class="btn" href="#quotes">Find a line that's yours</a>
-      <a class="btn-ghost" href="#book">Get the book</a>
+  <!-- ---------- the stage: one passage at a time ---------- -->
+  <section id="stage" class="stage">
+    <div class="stage-glow" aria-hidden="true"></div>
+
+    <h1 class="stage-title">I came to be free</h1>
+    <p class="stage-sub">Poems on grief, love, and renewal · PJ Starling</p>
+
+    <div class="stage-card">
+      <canvas id="card-canvas" width="1080" height="1080" role="img" aria-label="A passage from the book"></canvas>
+      <p class="stage-fallback" id="stage-fallback">Finding a passage…</p>
     </div>
-    <p class="hero-note">“When a poem reaches your heart, it stays there. It changes you. And when you share the poem, you share a piece of your heart along with it.”</p>
+
+    <p class="stage-poem" id="stage-poem"></p>
+
+    <div class="stage-actions">
+      <button class="btn" id="another" type="button">Another passage</button>
+      <button class="btn-ghost" id="native-share" type="button" hidden>Share…</button>
+      <button class="btn-ghost" id="download" type="button">Download</button>
+      <button class="btn-ghost" id="copy-text" type="button">Copy text</button>
+      <button class="btn-ghost" id="copy-link" type="button">Copy link</button>
+    </div>
+
+    <p class="stage-status" id="status" aria-live="polite"></p>
+
+    <details class="card-opts">
+      <summary>Card options</summary>
+      <div class="card-opts-body">
+        <div class="chips" role="group" aria-label="Card shape">
+          <button class="chip is-on" data-format="square" type="button">Square</button>
+          <button class="chip" data-format="story" type="button">Story</button>
+          <button class="chip" data-format="wide" type="button">Wide</button>
+        </div>
+        <div class="chips" role="group" aria-label="Card colour">
+          <button class="chip is-on" data-theme="ink" type="button">Ink</button>
+          <button class="chip" data-theme="cream" type="button">Cream</button>
+        </div>
+      </div>
+    </details>
+
+    <p class="stage-hint">Press <kbd>space</kbd> for another</p>
+
+    <button class="browse-toggle" id="browse-toggle" type="button" aria-expanded="false" aria-controls="quotes">
+      See all <span id="browse-count">59</span> passages
+    </button>
   </section>
 
-  <section id="quotes" class="quotes">
-    <div class="section-head">
-      <h2>Take a line with you</h2>
-      <p>Tap any passage to make a shareable card. Free to share, always.</p>
-    </div>
-
-    <div class="filters" role="group" aria-label="Filter quotes">
+  <!-- ---------- the library, behind the link ---------- -->
+  <section id="quotes" class="quotes" hidden>
+    <div class="filters" role="group" aria-label="Filter passages">
       <label class="search">
-        <span class="sr-only">Search the quotes</span>
+        <span class="sr-only">Search the passages</span>
         <input type="search" id="search" placeholder="Search a word or feeling…" autocomplete="off">
       </label>
       <div class="chips" id="theme-chips"></div>
@@ -70,7 +90,6 @@
         <span class="sr-only">Filter by poem</span>
         <select id="poem-filter"><option value="">All poems</option></select>
       </label>
-      <button class="btn-ghost sm" id="shuffle" type="button">Surprise me</button>
     </div>
 
     <p class="result-count" id="result-count" aria-live="polite"></p>
@@ -107,38 +126,8 @@
 
 <footer class="site-foot">
   <p><em>I came to be free</em> — poems by PJ Starling. © 2026 PJ Starling. Published by FriesenPress.</p>
-  <p class="fine">Quotes on this site are shared by the author for the purpose of sharing. Please keep the attribution with them.</p>
+  <p class="fine">Passages are shared by the author for the purpose of sharing. Please keep the attribution with them.</p>
 </footer>
-
-<!-- Share dialog -->
-<dialog id="share-dialog" class="share-dialog" aria-labelledby="share-title">
-  <button class="dlg-close" id="dlg-close" type="button" aria-label="Close">×</button>
-  <h2 id="share-title" class="sr-only">Share this passage</h2>
-  <div class="dlg-body">
-    <div class="preview-wrap">
-      <canvas id="card-canvas" width="1080" height="1080" role="img" aria-label="Quote card preview"></canvas>
-    </div>
-    <div class="dlg-controls">
-      <p class="dlg-poem" id="dlg-poem"></p>
-      <div class="chips" role="group" aria-label="Card shape">
-        <button class="chip is-on" data-format="square" type="button">Square</button>
-        <button class="chip" data-format="story" type="button">Story</button>
-        <button class="chip" data-format="wide" type="button">Wide</button>
-      </div>
-      <div class="chips" role="group" aria-label="Card colour">
-        <button class="chip is-on" data-theme="ink" type="button">Ink</button>
-        <button class="chip" data-theme="cream" type="button">Cream</button>
-      </div>
-      <div class="dlg-actions">
-        <button class="btn" id="download" type="button">Download image</button>
-        <button class="btn-ghost" id="native-share" type="button" hidden>Share…</button>
-        <button class="btn-ghost" id="copy-text" type="button">Copy text</button>
-        <button class="btn-ghost" id="copy-link" type="button">Copy link</button>
-      </div>
-      <p class="dlg-status" id="dlg-status" aria-live="polite"></p>
-    </div>
-  </div>
-</dialog>
 
 <script src="assets/card.js"></script>
 <script src="assets/site.js"></script>
