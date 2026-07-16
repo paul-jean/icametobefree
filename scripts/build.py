@@ -14,36 +14,63 @@ Run it locally exactly as CI does:  python3 scripts/build.py && open _site/index
 """
 import html
 import json
+import os
 import pathlib
 import shutil
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 OUT = ROOT / "_site"
+CNAME_FILE = ROOT / "CNAME"
 
 data = json.loads((ROOT / "data" / "quotes.json").read_text(encoding="utf-8"))
 book = data["book"]
 poems = {p["id"]: p for p in data["poems"]}
 
-cname = ROOT / "CNAME"
-domain = cname.read_text().strip() if cname.exists() else "icametobefree.com"
-BASE = f"https://{domain}"
+
+def site_base():
+    """Where this build will actually be served from.
+
+    Never guess a domain here — a wrong BASE bakes dead canonical URLs and dead
+    redirects into every quote page. Order: an explicit CNAME wins; otherwise
+    derive the real Pages URL from the repo; locally, fall back to relative.
+    """
+    if CNAME_FILE.exists():
+        domain = CNAME_FILE.read_text().strip()
+        if domain:
+            return f"https://{domain}", domain
+
+    repo = os.environ.get("GITHUB_REPOSITORY")  # "owner/name", set by Actions
+    if repo:
+        owner, name = repo.split("/", 1)
+        owner = owner.lower()
+        if name.lower() == f"{owner}.github.io":
+            return f"https://{owner}.github.io", f"{owner}.github.io"
+        return f"https://{owner}.github.io/{name}", f"{owner}.github.io/{name}"
+
+    return "", "(relative — local preview)"
+
+
+BASE, domain = site_base()
 
 # --- copy the static site -------------------------------------------------
 if OUT.exists():
     shutil.rmtree(OUT)
 OUT.mkdir()
 
-for name in ("index.html", "assets", "data"):
-    src = ROOT / name
-    if src.is_dir():
-        shutil.copytree(src, OUT / name)
-    else:
-        shutil.copy2(src, OUT / name)
+for name in ("assets", "data"):
+    shutil.copytree(ROOT / name, OUT / name)
+
+# index.html carries __BASE__ placeholders in its canonical/OG tags so the
+# deployed copy always points at itself.
+index = (ROOT / "index.html").read_text(encoding="utf-8")
+if "__BASE__" not in index:
+    raise SystemExit("index.html has no __BASE__ placeholder — check its meta tags")
+(OUT / "index.html").write_text(index.replace("__BASE__", BASE), encoding="utf-8")
 
 # Jekyll would otherwise ignore files/folders it doesn't like.
 (OUT / ".nojekyll").write_text("")
-if cname.exists():
-    shutil.copy2(cname, OUT / "CNAME")
+if CNAME_FILE.exists():
+    shutil.copy2(CNAME_FILE, OUT / "CNAME")
 
 # --- per-quote share pages ------------------------------------------------
 PAGE = """<!DOCTYPE html>

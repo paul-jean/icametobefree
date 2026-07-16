@@ -118,6 +118,14 @@ Until you have a domain, the site works as-is at `<username>.github.io/<repo>/`.
 
 ## Notes for future-you
 
+- **The site's own URL is never hardcoded.** `build.py` works it out: a `CNAME`
+  file wins, else it derives the real Pages URL from `$GITHUB_REPOSITORY`, else
+  (local preview) it falls back to relative. `index.html` uses a `__BASE__`
+  placeholder that gets substituted at build time — that's why you should
+  preview via `_site/`, not by opening `index.html` directly. Don't put a guessed
+  domain in that fallback: a wrong base bakes dead canonical URLs and dead
+  redirects into all 59 quote pages.
+
 - **The canvas needs the webfont loaded** before it draws, or cards silently
   render in Times. `site.js` waits on `document.fonts.ready` — don't remove that.
 - **Card layout auto-fits**: `card.js` shrinks the type until the block fits both
