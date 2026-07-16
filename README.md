@@ -94,27 +94,35 @@ gh auth refresh -h github.com -s workflow
 
 ### Custom domain
 
-1. Register the domain.
-2. Create a `CNAME` file in the repo root containing just the domain:
-   ```
-   icametobefree.com
-   ```
-   `build.py` reads it and rewrites every canonical/OG URL to match — that's the
-   only place the domain is configured.
-3. At your registrar, point DNS at GitHub:
+The domain is **icametobefree.xyz**, set in the `CNAME` file at the repo root.
+That file is the single source of truth: `build.py` reads it and rewrites every
+canonical and OG URL, and GitHub reads it to route the domain. To move the site
+to a different domain, change that one file — don't hunt for hardcoded URLs,
+there aren't any.
 
-   | Type | Name | Value |
-   |---|---|---|
-   | A | @ | 185.199.108.153 |
-   | A | @ | 185.199.109.153 |
-   | A | @ | 185.199.110.153 |
-   | A | @ | 185.199.111.153 |
-   | CNAME | www | `<your-username>.github.io` |
+(`starlingpoetry.xyz` is also registered, for an author site later. A Pages site
+takes only one custom domain, so it isn't pointed here.)
 
-4. **Settings → Pages → Custom domain**, enter it, and tick **Enforce HTTPS**
-   once the certificate is issued (can take up to an hour).
+At the registrar, point DNS at GitHub:
 
-Until you have a domain, the site works as-is at `<username>.github.io/<repo>/`.
+| Type | Name | Value | TTL |
+|---|---|---|---|
+| A | @ | 185.199.108.153 | 3600 |
+| A | @ | 185.199.109.153 | 3600 |
+| A | @ | 185.199.110.153 | 3600 |
+| A | @ | 185.199.111.153 | 3600 |
+| CNAME | www | `paul-jean.github.io.` | 3600 |
+
+All four A records — they're GitHub's load balancers, not alternatives. The
+`www` CNAME value is the *user* domain (`paul-jean.github.io`), not the project
+path; GitHub works out the repo from the CNAME file.
+
+Then **Settings → Pages → Custom domain** → `icametobefree.xyz` → Save, and tick
+**Enforce HTTPS** once the certificate is issued (usually minutes, up to an hour;
+the checkbox stays greyed out until then).
+
+Without a `CNAME` file the site falls back to `paul-jean.github.io/icametobefree/`
+automatically — nothing breaks, the URLs just change.
 
 ## Notes for future-you
 

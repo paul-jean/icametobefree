@@ -87,18 +87,24 @@ tooling, no `npm install`, no framework to age out from under you.
 
 ### Domain
 
-`.com` if you can get it, and check availability yourself — I couldn't reach a
-registrar from here, so treat these as candidates, not confirmations:
+**icametobefree.xyz** (registered July 2026), set in the `CNAME` file at the repo
+root — the single place the domain is configured.
 
-1. **icametobefree.com** — matches the book, matches the message, no explanation needed. First choice.
-2. **pjstarling.com** — an author site that outlives this one book. Strongest long-term play if you'll publish a third.
-3. **icametobefree.ca** — you're a Canadian author with a Canadian publisher; likely available.
+Two domains exist, with one job each:
 
-Best of both: register `pjstarling.com` **and** `icametobefree.com`, point the
-book domain at this site, and keep the author domain for later. ~$25/year total.
+| Domain | Role |
+|---|---|
+| `icametobefree.xyz` | This site. Matches the book, so every share card is stamped with the title a reader is holding. |
+| `starlingpoetry.xyz` | Reserved for an author site spanning all the books. Not pointed here — a Pages site takes only one custom domain. |
 
-Whichever you pick, put it in a `CNAME` file at the repo root — the build reads
-it and rewrites every canonical and OG URL to match.
+That split is the right way round for this project: the cards carry the book,
+and the author domain is free to become a home for the next one without moving
+this site or breaking any link already in the wild.
+
+Two things to keep an eye on:
+
+- **`.xyz` is cheap, which is why spammers like it.** A few corporate mail filters and link scanners treat the whole TLD with suspicion. It won't affect Instagram or texting, but if you ever email links to bookstores or reviewers, watch for silence that isn't really silence.
+- **Renewals — this one is not hypothetical.** `rule146.com` lapsed, was re-registered by a spam operation, and quietly inherited every visitor to `paul-jean.github.io` for months. Once quote cards are circulating with `icametobefree.xyz` printed on them, they can't be recalled, and a lapse hands that audience to whoever registers next. Auto-renew on, card on file current, on both domains.
 
 ## Deliberately not doing
 

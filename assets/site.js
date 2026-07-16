@@ -2,9 +2,16 @@
 (function () {
   'use strict';
 
-  var SITE = location.hostname && location.hostname !== 'localhost'
-    ? location.hostname.replace(/^www\./, '')
-    : 'icametobefree.com';
+  /* The line printed on every shared card. It must be somewhere a reader can
+     actually type in and land on this site — so it keeps the path (the site may
+     live at /icametobefree/, where the bare host serves something else) and
+     never invents a domain we don't own. */
+  var SITE = (function () {
+    var host = location.hostname.replace(/^www\./, '');
+    if (!host || host === 'localhost' || host === '127.0.0.1') return 'i came to be free';
+    var path = location.pathname.replace(/\/index\.html$/, '').replace(/\/+$/, '');
+    return host + path;
+  })();
 
   var state = {
     data: null,
