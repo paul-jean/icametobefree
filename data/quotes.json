@@ -1,0 +1,862 @@
+{
+  "book": {
+    "title": "I came to be free",
+    "subtitle": "Poems on grief, love, and renewal",
+    "author": "PJ Starling",
+    "year": 2026,
+    "publisher": "FriesenPress",
+    "isbn_paperback": "978-1-03-837224-6",
+    "isbn_hardcover": "978-1-03-837225-3",
+    "isbn_ebook": "978-1-03-837226-0",
+    "buy": {
+      "friesenpress": "https://books.friesenpress.com/store/title/119734000577049719/PJ-Starling-I-came-to-be-free",
+      "apple": "https://itunes.apple.com/us/book/isbn9781038372260",
+      "kobo": "https://www.kobo.com/search?q=9781038372260",
+      "google": "https://play.google.com/store/search?q=9781038372260&c=books",
+      "nook": "https://www.barnesandnoble.com/search?q=I%20came%20to%20be%20free+PJ%20Starling&attributes.mfield_bnb__parentFormat=eBook"
+    }
+  },
+  "poems": [
+    {
+      "id": "where-light-never-goes",
+      "title": "Where light never goes",
+      "page": 1
+    },
+    {
+      "id": "as-the-light-is-a-star",
+      "title": "As the light is a star",
+      "page": 5
+    },
+    {
+      "id": "i-came-to-be-free",
+      "title": "I came to be free",
+      "page": 9
+    },
+    {
+      "id": "volcano-in-a-sea-of-blue",
+      "title": "Volcano in a sea of blue",
+      "page": 13
+    },
+    {
+      "id": "god-of-choice",
+      "title": "God of choice",
+      "page": 17
+    },
+    {
+      "id": "flower-of-winter",
+      "title": "Flower of winter",
+      "page": 21
+    },
+    {
+      "id": "gaman",
+      "title": "Gaman!",
+      "page": 25
+    },
+    {
+      "id": "i-say-your-name",
+      "title": "I say your name",
+      "page": 31
+    },
+    {
+      "id": "the-nutshell",
+      "title": "The nutshell",
+      "page": 33
+    }
+  ],
+  "quotes": [
+    {
+      "id": "wlng-1",
+      "poem": "where-light-never-goes",
+      "themes": [
+        "grief",
+        "hope"
+      ],
+      "lines": [
+        "Motherless baby",
+        "Fatherless son",
+        "A spark in the void",
+        "Where once there was none"
+      ]
+    },
+    {
+      "id": "wlng-2",
+      "poem": "where-light-never-goes",
+      "themes": [
+        "grief"
+      ],
+      "lines": [
+        "I needed a King",
+        "I needed a Queen",
+        "To call off the war",
+        "Inside of my being"
+      ]
+    },
+    {
+      "id": "wlng-3",
+      "poem": "where-light-never-goes",
+      "themes": [
+        "grief"
+      ],
+      "lines": [
+        "I am weary and worn",
+        "From the war that’s within",
+        "From the countless long battles",
+        "I could so rarely win"
+      ]
+    },
+    {
+      "id": "wlng-4",
+      "poem": "where-light-never-goes",
+      "themes": [
+        "hope",
+        "renewal"
+      ],
+      "lines": [
+        "A love came to be",
+        "From a life of neglect",
+        "From the dark came a spark",
+        "From the twigs … came a nest!"
+      ]
+    },
+    {
+      "id": "wlng-5",
+      "poem": "where-light-never-goes",
+      "themes": [
+        "hope",
+        "love"
+      ],
+      "lines": [
+        "So love in the Universe",
+        "Is thus not conserved!",
+        "From pure darkness came light",
+        "From the egg … came a bird!"
+      ]
+    },
+    {
+      "id": "wlng-6",
+      "poem": "where-light-never-goes",
+      "themes": [
+        "renewal",
+        "hope"
+      ],
+      "lines": [
+        "In the rock, over eons",
+        "A clear crystal grows",
+        "From the bowels of darkness",
+        "Where light never goes"
+      ]
+    },
+    {
+      "id": "wlng-7",
+      "poem": "where-light-never-goes",
+      "themes": [
+        "grief",
+        "hope"
+      ],
+      "lines": [
+        "I was desperate for light",
+        "In the cold and the dark",
+        "A hunger so painful",
+        "The pain made a spark"
+      ]
+    },
+    {
+      "id": "altias-1",
+      "poem": "as-the-light-is-a-star",
+      "themes": [
+        "love"
+      ],
+      "lines": [
+        "You thirst because",
+        "You’re made of water",
+        "And you love as a Son",
+        "Who is loved by his Father"
+      ]
+    },
+    {
+      "id": "altias-2",
+      "poem": "as-the-light-is-a-star",
+      "themes": [
+        "love"
+      ],
+      "lines": [
+        "Love is a force",
+        "That loves all the same",
+        "Love is a constant",
+        "Putting gravity to shame"
+      ]
+    },
+    {
+      "id": "altias-3",
+      "poem": "as-the-light-is-a-star",
+      "themes": [
+        "love"
+      ],
+      "lines": [
+        "Loving can increase",
+        "By loving itself",
+        "As ants gather sugar",
+        "Calling more in to help"
+      ]
+    },
+    {
+      "id": "altias-4",
+      "poem": "as-the-light-is-a-star",
+      "themes": [
+        "love"
+      ],
+      "lines": [
+        "Love gathers love",
+        "To reap what it sows",
+        "Love is the violin",
+        "And also the bow"
+      ]
+    },
+    {
+      "id": "altias-5",
+      "poem": "as-the-light-is-a-star",
+      "themes": [
+        "love"
+      ],
+      "lines": [
+        "Love’s the transaction",
+        "And also the wealth",
+        "Love’s the one thing",
+        "That cannot be bought"
+      ]
+    },
+    {
+      "id": "altias-6",
+      "poem": "as-the-light-is-a-star",
+      "themes": [
+        "love"
+      ],
+      "lines": [
+        "Love is a word",
+        "That was whispered and hushed",
+        "For love slows the hurried",
+        "When their progress is rushed"
+      ]
+    },
+    {
+      "id": "altias-7",
+      "poem": "as-the-light-is-a-star",
+      "themes": [
+        "love",
+        "hope"
+      ],
+      "lines": [
+        "Love shines a light",
+        "On what love is not",
+        "And brings back the memory",
+        "Of things long forgot"
+      ]
+    },
+    {
+      "id": "altias-8",
+      "poem": "as-the-light-is-a-star",
+      "themes": [
+        "love"
+      ],
+      "lines": [
+        "Love can increase",
+        "But never reduce",
+        "Love’s never war",
+        "But always the truce"
+      ]
+    },
+    {
+      "id": "altias-9",
+      "poem": "as-the-light-is-a-star",
+      "themes": [
+        "love"
+      ],
+      "lines": [
+        "Love is coherent",
+        "And love is dramatic",
+        "Love is like music",
+        "Rising up through the static"
+      ]
+    },
+    {
+      "id": "altias-10",
+      "poem": "as-the-light-is-a-star",
+      "themes": [
+        "love",
+        "grief"
+      ],
+      "lines": [
+        "Love you can keep",
+        "For love’s what you are",
+        "As the note is the music",
+        "As the light is a star"
+      ]
+    },
+    {
+      "id": "ictbf-1",
+      "poem": "i-came-to-be-free",
+      "themes": [
+        "freedom"
+      ],
+      "lines": [
+        "I came to release",
+        "To give in to peace",
+        "To let be what will be",
+        "To be truly, fully me",
+        "I came to be free"
+      ]
+    },
+    {
+      "id": "ictbf-2",
+      "poem": "i-came-to-be-free",
+      "themes": [
+        "freedom"
+      ],
+      "lines": [
+        "So I came to be free",
+        "And deny them their fee",
+        "I say no to their race",
+        "I say no to their face"
+      ]
+    },
+    {
+      "id": "ictbf-3",
+      "poem": "i-came-to-be-free",
+      "themes": [
+        "forgiveness"
+      ],
+      "lines": [
+        "You said to forgive",
+        "Is how one learns to live",
+        "In a world full of pain",
+        "Full of heartache and shame"
+      ]
+    },
+    {
+      "id": "ictbf-4",
+      "poem": "i-came-to-be-free",
+      "themes": [
+        "forgiveness"
+      ],
+      "lines": [
+        "To forgive is divine",
+        "As the old saying said",
+        "And divine is within",
+        "Round your heart, not your head"
+      ]
+    },
+    {
+      "id": "ictbf-5",
+      "poem": "i-came-to-be-free",
+      "themes": [
+        "forgiveness",
+        "freedom"
+      ],
+      "lines": [
+        "You learn to forgive",
+        "By forgiving yourself",
+        "For losing your faith",
+        "In a world full of doubt"
+      ]
+    },
+    {
+      "id": "ictbf-6",
+      "poem": "i-came-to-be-free",
+      "themes": [
+        "forgiveness"
+      ],
+      "lines": [
+        "Forgive yourself",
+        "For being the fish",
+        "Who forgot about water",
+        "Then for water you wished"
+      ]
+    },
+    {
+      "id": "ictbf-7",
+      "poem": "i-came-to-be-free",
+      "themes": [
+        "forgiveness",
+        "freedom"
+      ],
+      "lines": [
+        "Forgive yourself",
+        "For playing the game",
+        "You forgot you were playing",
+        "And the game, you became"
+      ]
+    },
+    {
+      "id": "ictbf-8",
+      "poem": "i-came-to-be-free",
+      "themes": [
+        "freedom",
+        "forgiveness"
+      ],
+      "lines": [
+        "So dear, do you see",
+        "Freedom does have a fee",
+        "Forgiving yourself",
+        "For forgetting you’re free"
+      ]
+    },
+    {
+      "id": "ictbf-9",
+      "poem": "i-came-to-be-free",
+      "themes": [
+        "freedom"
+      ],
+      "lines": [
+        "You simply forgot",
+        "And that’s really all",
+        "So now just remember",
+        "And your problem is solved"
+      ]
+    },
+    {
+      "id": "volcano-1",
+      "poem": "volcano-in-a-sea-of-blue",
+      "themes": [
+        "love"
+      ],
+      "lines": [
+        "When I first saw you",
+        "I saw fire in your eyes",
+        "A volcano in the ocean",
+        "A burning fire in a sea of blue"
+      ]
+    },
+    {
+      "id": "volcano-2",
+      "poem": "volcano-in-a-sea-of-blue",
+      "themes": [
+        "love"
+      ],
+      "lines": [
+        "I saw a warrior in you",
+        "But battles make you weary",
+        "I know",
+        "And once one starts",
+        "How long will it go?"
+      ]
+    },
+    {
+      "id": "volcano-3",
+      "poem": "volcano-in-a-sea-of-blue",
+      "themes": [
+        "love"
+      ],
+      "lines": [
+        "It takes one to know one",
+        "And I’m a warrior too",
+        "Will you take your armor off?",
+        "And let me look at you?"
+      ]
+    },
+    {
+      "id": "volcano-4",
+      "poem": "volcano-in-a-sea-of-blue",
+      "themes": [
+        "love"
+      ],
+      "lines": [
+        "There now",
+        "I see you",
+        "And I want you even more",
+        "I see you",
+        "Raw and beautiful",
+        "Some parts of you are sore"
+      ]
+    },
+    {
+      "id": "goc-1",
+      "poem": "god-of-choice",
+      "themes": [
+        "grief"
+      ],
+      "lines": [
+        "I’ve watched as you make",
+        "The gravest mistake",
+        "As eons of rage",
+        "March in throngs to your gates"
+      ]
+    },
+    {
+      "id": "goc-2",
+      "poem": "god-of-choice",
+      "themes": [
+        "grief"
+      ],
+      "lines": [
+        "But how can you though?",
+        "For surely you know",
+        "You’re forever connected",
+        "To the seeds that you sow"
+      ]
+    },
+    {
+      "id": "goc-3",
+      "poem": "god-of-choice",
+      "themes": [
+        "grief",
+        "love"
+      ],
+      "lines": [
+        "And surely our love",
+        "For our little ones",
+        "Is to God’s but a candle",
+        "Held up to the sun"
+      ]
+    },
+    {
+      "id": "goc-4",
+      "poem": "god-of-choice",
+      "themes": [
+        "grief"
+      ],
+      "lines": [
+        "They won’t be forgotten",
+        "Because we can’t forget",
+        "Each candle of life",
+        "And a sun’s worth of death"
+      ]
+    },
+    {
+      "id": "fow-1",
+      "poem": "flower-of-winter",
+      "themes": [
+        "grief"
+      ],
+      "lines": [
+        "My hope fades away",
+        "With each passing day",
+        "My skin stings from cold",
+        "And my eyes drip with rain"
+      ]
+    },
+    {
+      "id": "fow-2",
+      "poem": "flower-of-winter",
+      "themes": [
+        "renewal",
+        "hope"
+      ],
+      "lines": [
+        "But flowers of winter",
+        "Now spring from the ground",
+        "The more cold and rain",
+        "The more they abound"
+      ]
+    },
+    {
+      "id": "fow-3",
+      "poem": "flower-of-winter",
+      "themes": [
+        "renewal"
+      ],
+      "lines": [
+        "Flowers of winter",
+        "Springing up in the cold",
+        "You grow from the remnants",
+        "Of spring flowers grown old"
+      ]
+    },
+    {
+      "id": "fow-4",
+      "poem": "flower-of-winter",
+      "themes": [
+        "renewal"
+      ],
+      "lines": [
+        "You make life of death",
+        "Eating death to renew",
+        "On old life you dine",
+        "On dead flesh you chew"
+      ]
+    },
+    {
+      "id": "fow-5",
+      "poem": "flower-of-winter",
+      "themes": [
+        "renewal",
+        "grief"
+      ],
+      "lines": [
+        "With flowers of winter",
+        "Encircling my frame",
+        "I will sink underground",
+        "To be earth once again"
+      ]
+    },
+    {
+      "id": "gaman-1",
+      "poem": "gaman",
+      "themes": [
+        "freedom"
+      ],
+      "lines": [
+        "It can’t be real work",
+        "If you don’t feel the grind",
+        "It’s got to be painful",
+        "Can’t let yourself slide"
+      ]
+    },
+    {
+      "id": "gaman-2",
+      "poem": "gaman",
+      "themes": [
+        "freedom",
+        "hope"
+      ],
+      "lines": [
+        "So grind it I did",
+        "Though once I did know",
+        "The joy and the freedom",
+        "Of feeling in flow"
+      ]
+    },
+    {
+      "id": "gaman-3",
+      "poem": "gaman",
+      "themes": [
+        "hope"
+      ],
+      "lines": [
+        "Flow was a rhythm",
+        "A music inside",
+        "It smoothed out the edges",
+        "Of pain in my life"
+      ]
+    },
+    {
+      "id": "gaman-4",
+      "poem": "gaman",
+      "themes": [
+        "hope",
+        "freedom"
+      ],
+      "lines": [
+        "With jets on my feet",
+        "And wings in my heart",
+        "I dreamed of the day",
+        "I could make a fresh start"
+      ]
+    },
+    {
+      "id": "gaman-5",
+      "poem": "gaman",
+      "themes": [
+        "grief"
+      ],
+      "lines": [
+        "“Oh ocean, my ocean",
+        "In waters so deep",
+        "Beloved Earth Mother",
+        "Hold my tears as I weep”"
+      ]
+    },
+    {
+      "id": "gaman-6",
+      "poem": "gaman",
+      "themes": [
+        "grief",
+        "renewal"
+      ],
+      "lines": [
+        "My tears soaked the land",
+        "As the tide lapped the sand",
+        "And the ocean held space",
+        "And the trees held my hand"
+      ]
+    },
+    {
+      "id": "gaman-7",
+      "poem": "gaman",
+      "themes": [
+        "grief",
+        "renewal"
+      ],
+      "lines": [
+        "The sea knows the pain",
+        "Yet onward it flows",
+        "Like breathing in tides",
+        "And exhaling ghosts"
+      ]
+    },
+    {
+      "id": "gaman-8",
+      "poem": "gaman",
+      "themes": [
+        "renewal",
+        "grief"
+      ],
+      "lines": [
+        "Have I come here to die?",
+        "Or to find some new growth?",
+        "Could that be my choice?",
+        "And can it be both?"
+      ]
+    },
+    {
+      "id": "gaman-9",
+      "poem": "gaman",
+      "themes": [
+        "renewal",
+        "grief"
+      ],
+      "lines": [
+        "If healing is feeling",
+        "And feeling’s like dying",
+        "Then healing’s like killing",
+        "The me that’s here crying"
+      ]
+    },
+    {
+      "id": "gaman-10",
+      "poem": "gaman",
+      "themes": [
+        "renewal",
+        "hope"
+      ],
+      "lines": [
+        "The waves are still breathing",
+        "After eons of slaughter",
+        "All the blood I can shed",
+        "Just a drop in the water"
+      ]
+    },
+    {
+      "id": "isyn-1",
+      "poem": "i-say-your-name",
+      "themes": [
+        "love"
+      ],
+      "lines": [
+        "Son, my dear son",
+        "My love, can you hear",
+        "The sound of my whisper",
+        "As I speak in your ear?"
+      ]
+    },
+    {
+      "id": "isyn-2",
+      "poem": "i-say-your-name",
+      "themes": [
+        "love"
+      ],
+      "lines": [
+        "I say your name",
+        "In blades of grass",
+        "In songs of birds",
+        "In sunsets past"
+      ]
+    },
+    {
+      "id": "isyn-3",
+      "poem": "i-say-your-name",
+      "themes": [
+        "love"
+      ],
+      "lines": [
+        "In great flocks of starlings",
+        "In wind and in rain",
+        "In all of these beings",
+        "In all of these ways",
+        "I say your name"
+      ]
+    },
+    {
+      "id": "isyn-4",
+      "poem": "i-say-your-name",
+      "themes": [
+        "love"
+      ],
+      "lines": [
+        "I say your name",
+        "With morning dew",
+        "I say your name",
+        "In shades of blue"
+      ]
+    },
+    {
+      "id": "isyn-5",
+      "poem": "i-say-your-name",
+      "themes": [
+        "love"
+      ],
+      "lines": [
+        "A seed of love",
+        "A love that’s free",
+        "A love that grows",
+        "A heart-shaped tree"
+      ]
+    },
+    {
+      "id": "nut-1",
+      "poem": "the-nutshell",
+      "themes": [
+        "grief",
+        "freedom"
+      ],
+      "lines": [
+        "You sealed off your feelings",
+        "And with them your heart",
+        "So when your heart swells",
+        "It blows you apart"
+      ]
+    },
+    {
+      "id": "nut-2",
+      "poem": "the-nutshell",
+      "themes": [
+        "freedom"
+      ],
+      "lines": [
+        "But you have forgotten",
+        "That you are the child",
+        "Who wants to be special",
+        "And aches to run wild"
+      ]
+    },
+    {
+      "id": "nut-3",
+      "poem": "the-nutshell",
+      "themes": [
+        "freedom"
+      ],
+      "lines": [
+        "This world is a prison",
+        "For those who accept it",
+        "Like a room full of doors",
+        "With no clearly marked exit"
+      ]
+    },
+    {
+      "id": "nut-4",
+      "poem": "the-nutshell",
+      "themes": [
+        "freedom"
+      ],
+      "lines": [
+        "You learned that the room",
+        "Was where you were held",
+        "To the whim of the makers",
+        "Like a nut in a shell"
+      ]
+    },
+    {
+      "id": "nut-5",
+      "poem": "the-nutshell",
+      "themes": [
+        "freedom",
+        "renewal"
+      ],
+      "lines": [
+        "But you’re not a walnut",
+        "All content in your shell",
+        "You’re a kernel of popcorn",
+        "You explode like all hell"
+      ]
+    }
+  ]
+}
