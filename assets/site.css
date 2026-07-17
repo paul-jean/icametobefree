@@ -238,6 +238,33 @@ section{padding:clamp(3rem,7vw,5.5rem) clamp(1.25rem,4vw,2.5rem)}
 }
 .credit{margin-top:2rem;font-style:italic}
 
+/* ---------- reading requests ---------- */
+.reading{border-top:1px solid var(--line)}
+.reading-wrap{max-width:40rem;margin:0 auto}
+.reading-scope{list-style:none;padding:0;margin:0 0 1.5rem;display:grid;gap:.6rem}
+.reading-scope li{color:var(--cream-dim);padding-left:1.1rem;position:relative}
+.reading-scope li::before{content:"—";position:absolute;left:0;color:var(--cream-faint)}
+.reading-scope strong{color:var(--cream);font-weight:400}
+.reading-fee{color:var(--cream-dim);margin:0 0 2.5rem}
+.reading-form{display:grid;gap:1rem}
+.reading-form label{display:grid;gap:.4rem;font-family:var(--display);font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;color:var(--cream-faint)}
+.reading-form input[type=text],.reading-form input[type=email],.reading-form select,.reading-form textarea{
+  font-family:var(--serif);font-size:1rem;color:var(--cream);
+  background:var(--ink-2);border:1px solid var(--line);border-radius:2px;
+  padding:.7em .9em;width:100%;
+}
+.reading-form textarea{resize:vertical;line-height:1.6}
+.reading-form select{appearance:none;cursor:pointer}
+.reading-form ::placeholder{color:var(--cream-faint)}
+.reading-form input:focus,.reading-form select:focus,.reading-form textarea:focus{outline:none;border-color:var(--cream-dim)}
+.reading-form .btn{justify-self:start;margin-top:.5rem}
+.reading-form .btn:disabled{opacity:.5;cursor:default}
+.hp{position:absolute;left:-9999px;opacity:0;pointer-events:none}   /* honeypot */
+.reading-status{min-height:1.3em;margin:.4rem 0 0;font-size:.9rem;color:var(--accent);font-style:italic}
+.reading-status a{color:var(--accent)}
+.reading-note{margin-top:2.5rem;border-left:2px solid var(--accent);padding-left:1rem;color:var(--cream-dim)}
+.reading-note strong{color:var(--cream);font-weight:400}
+
 /* ---------- footer ---------- */
 .site-foot{
   border-top:1px solid var(--line);text-align:center;

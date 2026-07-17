@@ -373,6 +373,50 @@
     setTimeout(function () { $('#poem-status').textContent = ''; }, 2600);
   });
 
+  /* ---------- reading requests ----------
+     Submitted by fetch so the reader stays on the page instead of being thrown
+     to a vendor's thank-you screen. If it fails for any reason — vendor down,
+     key expired, offline — say so and give the email address, because a lost
+     invitation from a library is a genuinely expensive failure. */
+  var rform = $('#reading-form');
+  if (rform) {
+    rform.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var status = $('#reading-status');
+      var btn = $('#reading-submit');
+      var data = Object.fromEntries(new FormData(rform));
+
+      if (!data.name || !data.email) {
+        status.textContent = 'A name and an email, and I can write back.';
+        return;
+      }
+
+      btn.disabled = true;
+      status.textContent = 'Sending…';
+
+      fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify(data)
+      })
+        .then(function (r) { return r.json(); })
+        .then(function (j) {
+          if (j.success) {
+            rform.innerHTML = '';
+            status.textContent = 'Thank you — that’s reached me. I’ll write back.';
+          } else {
+            throw new Error(j.message || 'rejected');
+          }
+        })
+        .catch(function () {
+          btn.disabled = false;
+          status.innerHTML = 'That didn’t send, sorry. Please email ' +
+            '<a href="mailto:paul.jean.letourneau@gmail.com?subject=Reading%20request">' +
+            'paul.jean.letourneau@gmail.com</a> instead.';
+        });
+    });
+  }
+
   /* ---------- the library ---------- */
   var toggle = $('#browse-toggle');
   var library = $('#quotes');

@@ -82,6 +82,13 @@ for name in ("favicon.ico",):
 index = (ROOT / "index.html").read_text(encoding="utf-8")
 if "__BASE__" not in index:
     raise SystemExit("index.html has no __BASE__ placeholder — check its meta tags")
+if "WEB3FORMS_ACCESS_KEY" in index:
+    raise SystemExit(
+        "the reading form still has the placeholder access key.\n"
+        "  Get a free key at https://web3forms.com (enter your email, they send it back)\n"
+        "  and paste it into index.html. Shipping the placeholder means every reading\n"
+        "  request silently vanishes — worse than having no form at all."
+    )
 (OUT / "index.html").write_text(index.replace("__BASE__", BASE), encoding="utf-8")
 
 # Jekyll would otherwise ignore files/folders it doesn't like.

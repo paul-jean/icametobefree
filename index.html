@@ -1,181 +1,476 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>I came to be free — Poems by PJ Starling</title>
-<meta name="description" content="Poems on grief, love, and renewal by PJ Starling. A line at a time — take the one that's yours and share it.">
-<link rel="canonical" href="__BASE__/">
-<meta property="og:type" content="book">
-<meta property="og:site_name" content="I came to be free">
-<meta property="og:title" content="I came to be free — Poems by PJ Starling">
-<meta property="og:description" content="Poems on grief, love, and renewal. A line at a time — take the one that's yours and share it.">
-<meta property="og:image" content="__BASE__/assets/og-default.png">
-<meta property="og:url" content="__BASE__/">
-<meta name="twitter:card" content="summary_large_image">
-<link rel="icon" href="__BASE__/favicon.ico" sizes="any">
-<link rel="icon" href="__BASE__/assets/favicon.svg" type="image/svg+xml">
-<link rel="apple-touch-icon" href="__BASE__/assets/apple-touch-icon.png">
-<meta name="theme-color" content="#0b0b0d">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/site.css">
-</head>
-<body>
-<a class="skip" href="#stage">Skip to the poem</a>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>I came to be free — Poems by PJ Starling</title>
+    <meta
+      name="description"
+      content="Poems on grief, love, and renewal by PJ Starling. A line at a time — take the one that's yours and share it."
+    />
+    <link rel="canonical" href="__BASE__/" />
+    <meta property="og:type" content="book" />
+    <meta property="og:site_name" content="I came to be free" />
+    <meta
+      property="og:title"
+      content="I came to be free — Poems by PJ Starling"
+    />
+    <meta
+      property="og:description"
+      content="Poems on grief, love, and renewal. A line at a time — take the one that's yours and share it."
+    />
+    <meta property="og:image" content="__BASE__/assets/og-default.png" />
+    <meta property="og:url" content="__BASE__/" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="__BASE__/favicon.ico" sizes="any" />
+    <link rel="icon" href="__BASE__/assets/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="__BASE__/assets/apple-touch-icon.png" />
+    <meta name="theme-color" content="#0b0b0d" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="assets/site.css" />
+  </head>
+  <body>
+    <a class="skip" href="#stage">Skip to the poem</a>
 
-<header class="site-head">
-  <a class="brand" href="#top">I&nbsp;came&nbsp;to&nbsp;be&nbsp;free</a>
-  <nav>
-    <a href="#poems">Poems</a>
-    <a href="#book">The&nbsp;book</a>
-    <a href="#about">About</a>
-    <a class="btn-ghost" href="https://books.friesenpress.com/store/title/119734000577049719/PJ-Starling-I-came-to-be-free" target="_blank" rel="noopener" data-goatcounter-click="buy-header">Buy</a>
-  </nav>
-</header>
+    <header class="site-head">
+      <a class="brand" href="#top">I&nbsp;came&nbsp;to&nbsp;be&nbsp;free</a>
+      <nav>
+        <a href="#poems">Poems</a>
+        <a href="#book">The&nbsp;book</a>
+        <a href="#about">About</a>
+        <a href="#reading">Readings</a>
+        <a
+          class="btn-ghost"
+          href="https://books.friesenpress.com/store/title/119734000577049719/PJ-Starling-I-came-to-be-free"
+          target="_blank"
+          rel="noopener"
+          data-goatcounter-click="buy-header"
+          >Buy</a
+        >
+      </nav>
+    </header>
 
-<main id="top">
+    <main id="top">
+      <!-- ---------- the stage: one passage at a time ---------- -->
+      <section id="stage" class="stage">
+        <div class="stage-glow" aria-hidden="true"></div>
 
-  <!-- ---------- the stage: one passage at a time ---------- -->
-  <section id="stage" class="stage">
-    <div class="stage-glow" aria-hidden="true"></div>
+        <h1 class="stage-title">I came to be free</h1>
+        <p class="stage-sub">Poems on grief, love, and renewal · PJ Starling</p>
 
-    <h1 class="stage-title">I came to be free</h1>
-    <p class="stage-sub">Poems on grief, love, and renewal · PJ Starling</p>
+        <div class="stage-card">
+          <canvas
+            id="card-canvas"
+            width="1080"
+            height="1080"
+            role="img"
+            aria-label="A passage from the book"
+          ></canvas>
+          <p class="stage-fallback" id="stage-fallback">Finding a passage…</p>
+        </div>
 
-    <div class="stage-card">
-      <canvas id="card-canvas" width="1080" height="1080" role="img" aria-label="A passage from the book"></canvas>
-      <p class="stage-fallback" id="stage-fallback">Finding a passage…</p>
-    </div>
+        <p class="stage-poem" id="stage-poem"></p>
 
-    <p class="stage-poem" id="stage-poem"></p>
-
-    <!-- data-goatcounter-click: the events that answer "did anyone actually
+        <!-- data-goatcounter-click: the events that answer "did anyone actually
          share a line?" — the only metric in the plan that matters. -->
-    <div class="stage-actions">
-      <button class="btn" id="another" type="button">Another passage</button>
-      <button class="btn-ghost" id="native-share" type="button" hidden
-              data-goatcounter-click="card-shared">Share…</button>
-      <button class="btn-ghost" id="download" type="button"
-              data-goatcounter-click="card-downloaded">Download</button>
-      <button class="btn-ghost" id="copy-text" type="button"
-              data-goatcounter-click="text-copied">Copy text</button>
-      <button class="btn-ghost" id="copy-link" type="button"
-              data-goatcounter-click="link-copied">Copy link</button>
-    </div>
-
-    <p class="stage-status" id="status" aria-live="polite"></p>
-
-    <details class="card-opts">
-      <summary>Card options</summary>
-      <div class="card-opts-body">
-        <div class="chips" role="group" aria-label="Card shape">
-          <button class="chip is-on" data-format="square" type="button">Square</button>
-          <button class="chip" data-format="story" type="button">Story</button>
-          <button class="chip" data-format="wide" type="button">Wide</button>
+        <div class="stage-actions">
+          <button class="btn" id="another" type="button">
+            Another passage
+          </button>
+          <button
+            class="btn-ghost"
+            id="native-share"
+            type="button"
+            hidden
+            data-goatcounter-click="card-shared"
+          >
+            Share…
+          </button>
+          <button
+            class="btn-ghost"
+            id="download"
+            type="button"
+            data-goatcounter-click="card-downloaded"
+          >
+            Download
+          </button>
+          <button
+            class="btn-ghost"
+            id="copy-text"
+            type="button"
+            data-goatcounter-click="text-copied"
+          >
+            Copy text
+          </button>
+          <button
+            class="btn-ghost"
+            id="copy-link"
+            type="button"
+            data-goatcounter-click="link-copied"
+          >
+            Copy link
+          </button>
         </div>
-        <div class="chips" role="group" aria-label="Card colour">
-          <button class="chip is-on" data-theme="ink" type="button">Ink</button>
-          <button class="chip" data-theme="cream" type="button">Cream</button>
+
+        <p class="stage-status" id="status" aria-live="polite"></p>
+
+        <details class="card-opts">
+          <summary>Card options</summary>
+          <div class="card-opts-body">
+            <div class="chips" role="group" aria-label="Card shape">
+              <button class="chip is-on" data-format="square" type="button">
+                Square
+              </button>
+              <button class="chip" data-format="story" type="button">
+                Story
+              </button>
+              <button class="chip" data-format="wide" type="button">
+                Wide
+              </button>
+            </div>
+            <div class="chips" role="group" aria-label="Card colour">
+              <button class="chip is-on" data-theme="ink" type="button">
+                Ink
+              </button>
+              <button class="chip" data-theme="cream" type="button">
+                Cream
+              </button>
+            </div>
+          </div>
+        </details>
+
+        <p class="stage-hint">Press <kbd>space</kbd> for another</p>
+
+        <button
+          class="browse-toggle"
+          id="browse-toggle"
+          type="button"
+          aria-expanded="false"
+          aria-controls="quotes"
+        >
+          See all <span id="browse-count">59</span> passages
+        </button>
+      </section>
+
+      <!-- ---------- the poems, in full ---------- -->
+      <section id="poems" class="poems">
+        <div class="section-head">
+          <h2>The poems</h2>
+          <p>All nine, in full. Tap any stanza to make a card of it.</p>
         </div>
-      </div>
-    </details>
 
-    <p class="stage-hint">Press <kbd>space</kbd> for another</p>
+        <ul class="poem-index" id="poem-index"></ul>
 
-    <button class="browse-toggle" id="browse-toggle" type="button" aria-expanded="false" aria-controls="quotes">
-      See all <span id="browse-count">59</span> passages
-    </button>
-  </section>
+        <article class="poem" id="poem" hidden>
+          <button class="poem-back" id="poem-back" type="button">
+            ← All poems
+          </button>
+          <h3 class="poem-title" id="poem-title"></h3>
+          <p class="poem-meta" id="poem-meta"></p>
+          <div class="poem-body" id="poem-body"></div>
+          <div class="poem-foot">
+            <button class="btn-ghost" id="copy-poem-link" type="button">
+              Copy link to this poem
+            </button>
+            <a class="btn-ghost" href="#book">Get the book</a>
+          </div>
+          <p class="stage-status" id="poem-status" aria-live="polite"></p>
+        </article>
+      </section>
 
-  <!-- ---------- the poems, in full ---------- -->
-  <section id="poems" class="poems">
-    <div class="section-head">
-      <h2>The poems</h2>
-      <p>All nine, in full. Tap any stanza to make a card of it.</p>
-    </div>
+      <!-- ---------- the library, behind the link ---------- -->
+      <section id="quotes" class="quotes" hidden>
+        <div class="filters" role="group" aria-label="Filter passages">
+          <label class="search">
+            <span class="sr-only">Search the passages</span>
+            <input
+              type="search"
+              id="search"
+              placeholder="Search a word or feeling…"
+              autocomplete="off"
+            />
+          </label>
+          <div class="chips" id="theme-chips"></div>
+          <label class="select">
+            <span class="sr-only">Filter by poem</span>
+            <select id="poem-filter">
+              <option value="">All poems</option>
+            </select>
+          </label>
+        </div>
 
-    <ul class="poem-index" id="poem-index"></ul>
+        <p class="result-count" id="result-count" aria-live="polite"></p>
+        <ul class="quote-grid" id="quote-grid"></ul>
+        <p class="empty" id="empty" hidden>
+          No lines match that. Try another word.
+        </p>
+      </section>
 
-    <article class="poem" id="poem" hidden>
-      <button class="poem-back" id="poem-back" type="button">← All poems</button>
-      <h3 class="poem-title" id="poem-title"></h3>
-      <p class="poem-meta" id="poem-meta"></p>
-      <div class="poem-body" id="poem-body"></div>
-      <div class="poem-foot">
-        <button class="btn-ghost" id="copy-poem-link" type="button">Copy link to this poem</button>
-        <a class="btn-ghost" href="#book">Get the book</a>
-      </div>
-      <p class="stage-status" id="poem-status" aria-live="polite"></p>
-    </article>
-  </section>
+      <section id="book" class="book">
+        <div class="book-art">
+          <img
+            class="book-cover"
+            src="assets/cover.jpg"
+            width="900"
+            height="1441"
+            alt="Cover of I came to be free by PJ Starling: broken silver chains on a black field."
+          />
+        </div>
+        <div class="book-copy">
+          <h2>The book</h2>
+          <p>
+            Using original metaphor and lyrical language, PJ Starling examines
+            the deepest sorrows and the greatest triumphs of the human
+            experience — the struggle to forgive oneself for past wrongs, the
+            search for hope amidst the chaos of the modern world, and the desire
+            for true intimacy.
+          </p>
+          <p>
+            Nine poems. 42 pages. These heartfelt verses invite readers into a
+            space where they are seen and free to feel without judgment.
+          </p>
+          <ul class="buy-list">
+            <li>
+              <a
+                class="btn"
+                href="https://books.friesenpress.com/store/title/119734000577049719/PJ-Starling-I-came-to-be-free"
+                target="_blank"
+                rel="noopener"
+                data-goatcounter-click="buy-friesenpress"
+                >FriesenPress <em>— paperback, hardcover, eBook</em></a
+              >
+            </li>
+            <li>
+              <a
+                class="btn-ghost"
+                href="https://itunes.apple.com/us/book/isbn9781038372260"
+                target="_blank"
+                rel="noopener"
+                data-goatcounter-click="buy-apple"
+                >Apple Books</a
+              >
+            </li>
+            <li>
+              <a
+                class="btn-ghost"
+                href="https://www.kobo.com/search?q=9781038372260"
+                target="_blank"
+                rel="noopener"
+                data-goatcounter-click="buy-kobo"
+                >Kobo</a
+              >
+            </li>
+            <li>
+              <a
+                class="btn-ghost"
+                href="https://play.google.com/store/search?q=9781038372260&amp;c=books"
+                target="_blank"
+                rel="noopener"
+                data-goatcounter-click="buy-google"
+                >Google Play</a
+              >
+            </li>
+            <li>
+              <a
+                class="btn-ghost"
+                href="https://www.barnesandnoble.com/search?q=I%20came%20to%20be%20free+PJ%20Starling&amp;attributes.mfield_bnb__parentFormat=eBook"
+                target="_blank"
+                rel="noopener"
+                data-goatcounter-click="buy-nook"
+                >Nook</a
+              >
+            </li>
+          </ul>
+          <p class="fine">
+            Buying direct from FriesenPress supports a Canadian author most.
+            ISBN 978-1-03-837224-6 (paperback) · 978-1-03-837225-3 (hardcover) ·
+            978-1-03-837226-0 (eBook)
+          </p>
+        </div>
+      </section>
 
-  <!-- ---------- the library, behind the link ---------- -->
-  <section id="quotes" class="quotes" hidden>
-    <div class="filters" role="group" aria-label="Filter passages">
-      <label class="search">
-        <span class="sr-only">Search the passages</span>
-        <input type="search" id="search" placeholder="Search a word or feeling…" autocomplete="off">
-      </label>
-      <div class="chips" id="theme-chips"></div>
-      <label class="select">
-        <span class="sr-only">Filter by poem</span>
-        <select id="poem-filter"><option value="">All poems</option></select>
-      </label>
-    </div>
+      <section id="about" class="about">
+        <img
+          class="headshot"
+          src="assets/headshot.jpg"
+          srcset="assets/headshot.jpg 400w, assets/headshot@2x.jpg 800w"
+          sizes="180px"
+          width="400"
+          height="400"
+          loading="lazy"
+          alt="PJ Starling — a bald, bearded man in a grey hooded sweatshirt, looking straight at the camera against a dark background."
+        />
+        <h2>About PJ Starling</h2>
+        <p>
+          PJ Starling lives in Vancouver, BC, with his nine-year-old son.
+          <em>I came to be free</em> is his second book of poetry. His poem
+          “Where light never goes” was featured by The Art of Autism, an
+          organization that showcases the creative abilities of neurodivergent
+          individuals.
+        </p>
+        <p>
+          For him, writing poetry is a form of therapy that has helped him
+          through periods of change in his life. He hopes his poems will do the
+          same for his readers.
+        </p>
+        <p class="fine credit">Author photograph by Marshal Chupa</p>
+      </section>
 
-    <p class="result-count" id="result-count" aria-live="polite"></p>
-    <ul class="quote-grid" id="quote-grid"></ul>
-    <p class="empty" id="empty" hidden>No lines match that. Try another word.</p>
-  </section>
+      <section id="reading" class="reading">
+        <div class="section-head">
+          <h2>Invite me to read</h2>
+          <p>
+            Libraries, bookstores, reading series, classes, book clubs. I'd like
+            to come.
+          </p>
+        </div>
 
-  <section id="book" class="book">
-    <div class="book-art">
-      <img class="book-cover" src="assets/cover.jpg" width="900" height="1441"
-           alt="Cover of I came to be free by PJ Starling: broken silver chains on a black field.">
-    </div>
-    <div class="book-copy">
-      <h2>The book</h2>
-      <p>Using original metaphor and lyrical language, PJ Starling examines the deepest sorrows and the greatest triumphs of the human experience — the struggle to forgive oneself for past wrongs, the search for hope amidst the chaos of the modern world, and the desire for true intimacy.</p>
-      <p>Nine poems. 42 pages. These heartfelt verses invite readers into a space where they are seen and free to feel without judgment.</p>
-      <ul class="buy-list">
-        <li><a class="btn" href="https://books.friesenpress.com/store/title/119734000577049719/PJ-Starling-I-came-to-be-free" target="_blank" rel="noopener" data-goatcounter-click="buy-friesenpress">FriesenPress <em>— paperback, hardcover, eBook</em></a></li>
-        <li><a class="btn-ghost" href="https://itunes.apple.com/us/book/isbn9781038372260" target="_blank" rel="noopener" data-goatcounter-click="buy-apple">Apple Books</a></li>
-        <li><a class="btn-ghost" href="https://www.kobo.com/search?q=9781038372260" target="_blank" rel="noopener" data-goatcounter-click="buy-kobo">Kobo</a></li>
-        <li><a class="btn-ghost" href="https://play.google.com/store/search?q=9781038372260&amp;c=books" target="_blank" rel="noopener" data-goatcounter-click="buy-google">Google Play</a></li>
-        <li><a class="btn-ghost" href="https://www.barnesandnoble.com/search?q=I%20came%20to%20be%20free+PJ%20Starling&amp;attributes.mfield_bnb__parentFormat=eBook" target="_blank" rel="noopener" data-goatcounter-click="buy-nook">Nook</a></li>
-      </ul>
-      <p class="fine">Buying direct from FriesenPress supports a Canadian author most. ISBN 978-1-03-837224-6 (paperback) · 978-1-03-837225-3 (hardcover) · 978-1-03-837226-0 (eBook)</p>
-    </div>
-  </section>
+        <div class="reading-wrap">
+          <ul class="reading-scope">
+            <li>
+              <strong>Vancouver and the Lower Mainland</strong> — in person,
+              gladly.
+            </li>
+            <li>
+              <strong>Anywhere at all</strong> — online, by video. Book clubs
+              and classes welcome.
+            </li>
+            <li>
+              <strong>Elsewhere in BC or Canada</strong> — if travel is covered.
+            </li>
+          </ul>
 
-  <section id="about" class="about">
-    <img class="headshot" src="assets/headshot.jpg"
-         srcset="assets/headshot.jpg 400w, assets/headshot@2x.jpg 800w"
-         sizes="180px" width="400" height="400" loading="lazy"
-         alt="PJ Starling — a bald, bearded man in a grey hooded sweatshirt, looking straight at the camera against a dark background.">
-    <h2>About PJ Starling</h2>
-    <p>PJ Starling lives in Vancouver, BC, with his nine-year-old son. <em>I came to be free</em> is his second book of poetry. His poem “Where light never goes” was featured by The Art of Autism, an organization that showcases the creative abilities of neurodivergent individuals.</p>
-    <p>For him, writing poetry is a form of therapy that has helped him through periods of change in his life. He hopes his poems will do the same for his readers.</p>
-    <p class="fine credit">Author photograph by Marshal Chupa</p>
-  </section>
-</main>
+          <p class="reading-fee">
+            There's no fee to have me. An honorarium is welcome if you have one,
+            and entirely optional if you don't.
+          </p>
 
-<footer class="site-foot">
-  <p><em>I came to be free</em> — poems by PJ Starling. © 2026 PJ Starling. Published by FriesenPress.</p>
-  <p class="fine">Passages are shared by the author for the purpose of sharing. Please keep the attribution with them.</p>
-</footer>
+          <form id="reading-form" class="reading-form" novalidate>
+            <!-- Web3Forms: replace with the access key emailed to you from web3forms.com -->
+            <input
+              type="hidden"
+              name="access_key"
+              value="9cbaf893-dde8-4ba5-8c9b-736c95d21142"
+            />
+            <input
+              type="hidden"
+              name="subject"
+              value="Reading request — icametobefree.xyz"
+            />
+            <input type="hidden" name="from_name" value="icametobefree.xyz" />
+            <!-- honeypot: bots fill it, humans never see it -->
+            <input
+              type="checkbox"
+              name="botcheck"
+              class="hp"
+              tabindex="-1"
+              autocomplete="off"
+            />
 
-<script src="assets/card.js"></script>
-<script src="assets/site.js"></script>
+            <label
+              >Your name
+              <input type="text" name="name" required autocomplete="name" />
+            </label>
+            <label
+              >Email
+              <input type="email" name="email" required autocomplete="email" />
+            </label>
+            <label
+              >Where you're from
+              <input
+                type="text"
+                name="organisation"
+                placeholder="Library, bookshop, book club, class…"
+              />
+            </label>
+            <label
+              >Where would it be?
+              <select name="format">
+                <option value="">Choose…</option>
+                <option>In person — Vancouver / Lower Mainland</option>
+                <option>Online / video</option>
+                <option>Elsewhere in BC or Canada</option>
+                <option>Not sure yet</option>
+              </select>
+            </label>
+            <label
+              >Roughly when?
+              <input
+                type="text"
+                name="when"
+                placeholder="A month, a season, or a date"
+              />
+            </label>
+            <label
+              >Tell me about it
+              <textarea
+                name="message"
+                rows="4"
+                placeholder="Who's the audience? How long? Anything I should know."
+              ></textarea>
+            </label>
 
-<!-- GoatCounter: cookieless, no personal data, so no consent banner.
+            <button
+              class="btn"
+              type="submit"
+              id="reading-submit"
+              data-goatcounter-click="reading-requested"
+            >
+              Send the request
+            </button>
+            <p
+              class="reading-status"
+              id="reading-status"
+              aria-live="polite"
+            ></p>
+          </form>
+
+          <p class="fine reading-note">
+            <strong>I don't pay to appear.</strong> Any “invitation” that asks
+            me for a placement, promotion, or booking fee is a scam — there's a
+            lot of it about, impersonating real festivals. Genuine hosts never
+            charge the poet.
+          </p>
+          <p class="fine">
+            This form is handled by Web3Forms and emailed to me. I don't use
+            your details for anything else. If the form won't play, write to
+            <a
+              href="mailto:paul.jean.letourneau@gmail.com?subject=Reading%20request"
+              >paul.jean.letourneau@gmail.com</a
+            >.
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-foot">
+      <p>
+        <em>I came to be free</em> — poems by PJ Starling. © 2026 PJ Starling.
+        Published by FriesenPress.
+      </p>
+      <p class="fine">
+        Passages are shared by the author for the purpose of sharing. Please
+        keep the attribution with them.
+      </p>
+    </footer>
+
+    <script src="assets/card.js"></script>
+    <script src="assets/site.js"></script>
+
+    <!-- GoatCounter: cookieless, no personal data, so no consent banner.
      no_onload because this site is hash-routed — site.js counts each view
      itself with the hash included, otherwise every poem and every shared
      stanza would land on the pile marked "/". -->
-<script data-goatcounter="https://starlingpoetry.goatcounter.com/count"
-        data-goatcounter-settings='{"no_onload": true}'
-        async src="//gc.zgo.at/count.js"></script>
-</body>
+    <script
+      data-goatcounter="https://starlingpoetry.goatcounter.com/count"
+      data-goatcounter-settings='{"no_onload": true}'
+      async
+      src="//gc.zgo.at/count.js"
+    ></script>
+  </body>
 </html>
