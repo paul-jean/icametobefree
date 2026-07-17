@@ -16,6 +16,7 @@ import html
 import json
 import os
 import pathlib
+import re
 import shutil
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
@@ -23,8 +24,15 @@ OUT = ROOT / "_site"
 CNAME_FILE = ROOT / "CNAME"
 
 data = json.loads((ROOT / "data" / "quotes.json").read_text(encoding="utf-8"))
+full = json.loads((ROOT / "data" / "poems.json").read_text(encoding="utf-8"))
 book = data["book"]
 poems = {p["id"]: p for p in data["poems"]}
+full_by_id = {p["id"]: p for p in full["poems"]}
+
+
+def strip_md(s):
+    """Drop the *italic* / **bold** markers — meta tags take plain text."""
+    return re.sub(r"\*+", "", s)
 
 
 def site_base():
@@ -118,25 +126,91 @@ qdir = OUT / "q"
 qdir.mkdir()
 urls = [f"{BASE}/"]
 
-for q in data["quotes"]:
-    text = "\n".join(q["lines"])
-    desc = " / ".join(q["lines"])
-    poem = poems[q["poem"]]["title"]
+
+def write_quote_page(qid, lines, poem_title):
+    lines = [strip_md(l) for l in lines]
     page = PAGE.format(
         base=BASE,
-        qid=q["id"],
+        qid=qid,
         book=html.escape(book["title"]),
         author=html.escape(book["author"]),
-        poem=html.escape(poem),
-        title=html.escape(f"“{q['lines'][0]}…” — {book['author']}"),
-        desc=html.escape(desc),
-        lines_html="<br>".join(html.escape(l) for l in q["lines"]),
-        redirect=json.dumps(f"{BASE}/#q={q['id']}"),
+        poem=html.escape(poem_title),
+        title=html.escape(f"“{lines[0]}…” — {book['author']}"),
+        desc=html.escape(" / ".join(lines)),
+        lines_html="<br>".join(html.escape(l) for l in lines),
+        redirect=json.dumps(f"{BASE}/#q={qid}"),
     )
-    d = qdir / q["id"]
+    d = qdir / qid
+    d.mkdir(parents=True, exist_ok=True)
+    (d / "index.html").write_text(page, encoding="utf-8")
+    urls.append(f"{BASE}/q/{qid}/")
+
+
+# the curated passages (their ids are already in the wild — never rename)
+for q in data["quotes"]:
+    write_quote_page(q["id"], q["lines"], poems[q["poem"]]["title"])
+
+# every stanza in the book, so a reader can share the one that got them
+seen = {q["id"] for q in data["quotes"]}
+for p in full["poems"]:
+    for s in p["stanzas"]:
+        if s["id"] in seen:
+            raise SystemExit(f"stanza id collides with a curated quote id: {s['id']}")
+        write_quote_page(s["id"], s["lines"], p["title"])
+
+# ---- one page per poem, for sharing a whole poem as a link ----------------
+POEM_PAGE = """<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{title} — {author}</title>
+<meta name="description" content="{desc}">
+<link rel="canonical" href="{base}/poem/{pid}/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="{book}">
+<meta property="og:title" content="{title} — {author}">
+<meta property="og:description" content="{desc}">
+<meta property="og:image" content="{base}/assets/og-default.png">
+<meta property="og:url" content="{base}/poem/{pid}/">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="{base}/favicon.ico" sizes="any">
+<link rel="icon" href="{base}/assets/favicon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#0b0b0d">
+<meta http-equiv="refresh" content="0; url={base}/#poem={pid}">
+<link rel="stylesheet" href="{base}/assets/site.css">
+</head>
+<body>
+<main class="about">
+  <h2>{title}</h2>
+  <blockquote><p style="font-family:var(--display);font-size:1.25rem;line-height:1.85">{first}</p></blockquote>
+  <p>— {author}, <em>{book}</em></p>
+  <p><a class="btn" href="{base}/#poem={pid}">Read the poem</a></p>
+</main>
+<script>location.replace({redirect});</script>
+</body>
+</html>
+"""
+
+pdir = OUT / "poem"
+pdir.mkdir()
+for p in full["poems"]:
+    flat = [strip_md(l) for s in p["stanzas"] for l in s["lines"]]
+    first = [strip_md(l) for l in p["stanzas"][0]["lines"]]
+    page = POEM_PAGE.format(
+        base=BASE,
+        pid=p["id"],
+        book=html.escape(book["title"]),
+        author=html.escape(book["author"]),
+        title=html.escape(p["title"]),
+        desc=html.escape(" / ".join(flat[:4])),
+        first="<br>".join(html.escape(l) for l in first),
+        redirect=json.dumps(f"{BASE}/#poem={p['id']}"),
+    )
+    d = pdir / p["id"]
     d.mkdir()
     (d / "index.html").write_text(page, encoding="utf-8")
-    urls.append(f"{BASE}/q/{q['id']}/")
+    urls.append(f"{BASE}/poem/{p['id']}/")
 
 # --- sitemap / robots / 404 ----------------------------------------------
 sitemap = "\n".join(f"  <url><loc>{u}</loc></url>" for u in urls)
@@ -157,4 +231,6 @@ sitemap = "\n".join(f"  <url><loc>{u}</loc></url>" for u in urls)
     encoding="utf-8",
 )
 
-print(f"built _site/ — {len(data['quotes'])} quote pages, domain {domain}")
+nstanza = sum(len(p["stanzas"]) for p in full["poems"])
+print(f"built _site/ — {len(data['quotes'])} curated + {nstanza} stanza pages, "
+      f"{len(full['poems'])} poem pages, domain {domain}")

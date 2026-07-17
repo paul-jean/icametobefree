@@ -28,6 +28,7 @@
 <header class="site-head">
   <a class="brand" href="#top">I&nbsp;came&nbsp;to&nbsp;be&nbsp;free</a>
   <nav>
+    <a href="#poems">Poems</a>
     <a href="#book">The&nbsp;book</a>
     <a href="#about">About</a>
     <a class="btn-ghost" href="https://books.friesenpress.com/store/title/119734000577049719/PJ-Starling-I-came-to-be-free" target="_blank" rel="noopener">Buy</a>
@@ -80,6 +81,28 @@
     <button class="browse-toggle" id="browse-toggle" type="button" aria-expanded="false" aria-controls="quotes">
       See all <span id="browse-count">59</span> passages
     </button>
+  </section>
+
+  <!-- ---------- the poems, in full ---------- -->
+  <section id="poems" class="poems">
+    <div class="section-head">
+      <h2>The poems</h2>
+      <p>All nine, in full. Tap any stanza to make a card of it.</p>
+    </div>
+
+    <ul class="poem-index" id="poem-index"></ul>
+
+    <article class="poem" id="poem" hidden>
+      <button class="poem-back" id="poem-back" type="button">← All poems</button>
+      <h3 class="poem-title" id="poem-title"></h3>
+      <p class="poem-meta" id="poem-meta"></p>
+      <div class="poem-body" id="poem-body"></div>
+      <div class="poem-foot">
+        <button class="btn-ghost" id="copy-poem-link" type="button">Copy link to this poem</button>
+        <a class="btn-ghost" href="#book">Get the book</a>
+      </div>
+      <p class="stage-status" id="poem-status" aria-live="polite"></p>
+    </article>
   </section>
 
   <!-- ---------- the library, behind the link ---------- -->

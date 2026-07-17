@@ -114,7 +114,54 @@ h1,h2,h3{font-family:var(--display);font-weight:400;line-height:1.15;margin:0}
 
 /* ---------- sections ---------- */
 section{padding:clamp(3rem,7vw,5.5rem) clamp(1.25rem,4vw,2.5rem)}
-.about h2,.book-copy h2{font-size:clamp(1.7rem,4vw,2.4rem);letter-spacing:.02em}
+.about h2,.book-copy h2,.section-head h2{font-size:clamp(1.7rem,4vw,2.4rem);letter-spacing:.02em}
+.section-head{max-width:var(--wrap);margin:0 auto 2.5rem;text-align:center}
+.section-head p{color:var(--cream-dim);margin:.6rem 0 0}
+
+/* ---------- the poems ---------- */
+.poems{border-bottom:1px solid var(--line)}
+.poem-index{list-style:none;padding:0;margin:0 auto;max-width:44rem;display:grid;gap:.5rem}
+.poem-link{
+  width:100%;display:flex;align-items:baseline;justify-content:space-between;gap:1rem;
+  background:var(--ink-2);border:1px solid var(--line);border-radius:3px;
+  padding:1.1rem 1.4rem;cursor:pointer;transition:.22s ease;text-align:left;font:inherit;color:inherit;
+}
+.poem-link:hover,.poem-link:focus-visible{background:var(--ink-3);border-color:rgba(239,233,221,.35);transform:translateY(-1px);outline:none}
+.pl-title{font-family:var(--display);font-size:1.35rem;letter-spacing:.01em}
+.pl-meta{font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:var(--cream-faint);white-space:nowrap}
+
+.poem{max-width:40rem;margin:0 auto}
+.poem-back{
+  background:none;border:0;cursor:pointer;color:var(--cream-faint);font-family:var(--display);
+  font-size:.8rem;letter-spacing:.14em;text-transform:uppercase;padding:.4rem 0;margin-bottom:1.5rem;
+}
+.poem-back:hover{color:var(--cream)}
+.poem-title{font-size:clamp(1.5rem,4vw,2.1rem);letter-spacing:.16em;text-transform:uppercase;text-indent:.16em;font-weight:300;text-align:center}
+.poem-meta{text-align:center;font-family:var(--display);font-style:italic;color:var(--cream-faint);margin:.5rem 0 2.5rem;font-size:.9rem}
+.poem-body{display:grid;gap:.4rem}
+
+/* Each stanza is its own share target. The cue only appears on intent, so
+   reading isn't cluttered by 142 buttons asking to be pressed. */
+.stanza{
+  position:relative;width:100%;text-align:left;background:none;border:0;cursor:pointer;
+  font:inherit;color:inherit;padding:1rem 3.5rem 1rem 1.1rem;border-radius:3px;
+  border-left:2px solid transparent;transition:background .2s ease,border-color .2s ease;
+}
+.stanza:hover,.stanza:focus-visible{background:rgba(239,233,221,.045);border-left-color:var(--accent);outline:none}
+.stanza:hover .stanza-cue,.stanza:focus-visible .stanza-cue{opacity:1;transform:translateY(0)}
+.stanza-lines{
+  font-family:var(--display);font-size:clamp(1.15rem,2.6vw,1.35rem);line-height:1.85;margin:0;letter-spacing:.01em;
+}
+.stanza-lines em{font-style:italic}
+.stanza-lines strong{font-weight:600}
+.stanza-cue{
+  position:absolute;top:1rem;right:1rem;font-family:var(--display);font-size:.68rem;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--accent);
+  opacity:0;transform:translateY(-3px);transition:.2s ease;white-space:nowrap;
+}
+@media(hover:none){.stanza-cue{opacity:.5;transform:none}}
+.poem-foot{display:flex;flex-wrap:wrap;gap:.6rem;justify-content:center;margin-top:2.5rem}
+.poem-foot .btn-ghost{font-size:.78rem;padding:.62em 1.1em}
 
 /* ---------- filters ---------- */
 .filters{

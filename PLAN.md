@@ -37,10 +37,28 @@ Single page, built around one passage at a time:
 
 | Section | Job |
 |---|---|
-| **The stage** | The site. One randomly drawn passage, rendered as the actual share card. "Another passage" draws the next. Share actions sit right under it. |
-| The library | Behind a "See all 59 passages" link. The filterable grid, for people hunting a specific line. Hidden by default. |
+| **The stage** | The front door. One randomly drawn passage, rendered as the actual share card. "Another passage" draws the next. Share actions sit right under it. |
+| **The poems** | All nine, in full. Any of the 142 stanzas is tappable → becomes a card. A whole poem shares as a link. |
+| The library | Behind a "See all 59 passages" link. The curated grid, filterable, for people hunting a specific line. |
 | The book | Cover, blurb, buy links. FriesenPress first — it pays you most. |
 | About | Your bio, briefly. |
+
+### Why the full poems are here — a reversal
+
+The site originally held curated passages only, to keep a reason to buy. That
+was the wrong call, and it fought the book's stated purpose: *the purpose of
+this book of poetry is to be shared.* A reader moved by a stanza I hadn't picked
+had nothing to share.
+
+The reasoning that changed it:
+
+- **For an unknown poet, obscurity is a far bigger risk than piracy.** Nobody is declining to buy because they read it free — they're declining to notice.
+- 59 passages were already given away. The rest was a smaller step than it felt.
+- It makes the site the **canonical home** of the poems, which is where every shared link should land.
+
+What still isn't here, deliberately: **the illustrations.** PJ drew them —
+broken handcuffs, a volcano — and they're a real reason to hold the physical
+book. The words travel; the object stays worth owning.
 
 **Why one at a time.** A grid of 59 asks the reader to choose, and choosing is
 work — most people skim a wall of stanzas and take none of them. A single

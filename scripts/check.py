@@ -50,11 +50,48 @@ for q in data["quotes"]:
     if not q.get("themes"):
         warnings.append(f"{qid}: no themes — it won't appear under any filter chip")
 
+# ---- poems.json: the full text, and now the canonical copy of the book ----
+full = json.loads((ROOT / "data" / "poems.json").read_text(encoding="utf-8"))
+poem_ids_full = set()
+stanza_ids = set()
+for p in full["poems"]:
+    if not re.fullmatch(r"[a-z0-9-]+", p["id"]):
+        errors.append(f"poem id not URL-safe: {p['id']!r}")
+    poem_ids_full.add(p["id"])
+    if not p["stanzas"]:
+        errors.append(f"{p['id']}: no stanzas")
+    for s in p["stanzas"]:
+        if s["id"] in stanza_ids:
+            errors.append(f"duplicate stanza id: {s['id']}")
+        stanza_ids.add(s["id"])
+        if s["id"] in seen:
+            errors.append(f"stanza id collides with a curated quote id: {s['id']}")
+        if not s.get("lines"):
+            errors.append(f"{s['id']}: no lines")
+        for line in s["lines"]:
+            # markdown-lite emphasis must be balanced or the card renders literal asterisks
+            if line.count("**") % 2:
+                errors.append(f"{s['id']}: unbalanced ** in {line!r}")
+            if (line.replace("**", "").count("*")) % 2:
+                errors.append(f"{s['id']}: unbalanced * in {line!r}")
+            if "'" in line:
+                warnings.append(f"{s['id']}: straight apostrophe in {line!r} — use ’")
+
+if poem_ids_full != poem_ids:
+    errors.append(f"poems.json and quotes.json disagree on poems: "
+                  f"{poem_ids_full ^ poem_ids}")
+
+for q in data["quotes"]:
+    if q["poem"] not in poem_ids_full:
+        errors.append(f"{q['id']}: poem {q['poem']!r} has no full text in poems.json")
+
 for w in warnings:
     print(f"warning: {w}")
 for e in errors:
     print(f"ERROR: {e}", file=sys.stderr)
 
-print(f"\n{len(data['quotes'])} quotes across {len(data['poems'])} poems, "
+nlines = sum(len(s["lines"]) for p in full["poems"] for s in p["stanzas"])
+print(f"\n{len(data['quotes'])} curated quotes · {len(stanza_ids)} stanzas · "
+      f"{nlines} lines across {len(full['poems'])} poems — "
       f"{len(errors)} errors, {len(warnings)} warnings")
 sys.exit(1 if errors else 0)

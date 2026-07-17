@@ -55,8 +55,9 @@ it's unreadable on a phone. `check.py` warns you.
 ```
 index.html            the whole site
 assets/site.css       styles
-assets/site.js        the draw deck, the stage, the library, share actions
+assets/site.js        the draw deck, the stage, the poems, the library, share actions
 assets/card.js        canvas card renderer (no DOM deps — testable on its own)
+data/poems.json       all 9 poems in full — 142 stanzas, 546 lines
 assets/cover.jpg      front cover, cropped from the FriesenPress print PDF
 assets/og-default.png 1200×630 link preview image
 data/quotes.json      all content lives here
@@ -158,6 +159,24 @@ automatically — nothing breaks, the URLs just change.
 
 - **The canvas needs the webfont loaded** before it draws, or cards silently
   render in Times. `site.js` waits on `document.fonts.ready` — don't remove that.
+
+- **`data/poems.json` is the canonical text of the book**, extracted from the
+  FriesenPress print PDF and verified stanza-by-stanza against the glyph stream
+  (142/142). Stanza breaks come from measured line gaps — 15pt within a stanza,
+  ~24pt between. Nine stanzas span a page break and were rejoined. If you ever
+  re-extract: cluster glyphs on the **baseline**, not `top`, or italic words get
+  torn onto their own line; and don't verify against pypdf's text layer, which
+  invents spaces after capitals ("T o", "T rading").
+
+- **Emphasis is the poet's, not decoration.** Lines carry markdown-lite —
+  `*italic*` and `**bold**`. The book has five italic runs and one bold stanza
+  (The nutshell, s3). `check.py` fails on unbalanced markers. Dropping them
+  would misquote the book.
+
+- **One correction to the printed text.** Page 15 has `I'll` with a straight
+  apostrophe where every other apostrophe in all 42 pages is curly — a genuine
+  typo in the paperback, hardcover and eBook. The site uses `’`. Worth fixing in
+  the eBook via FriesenPress.
 
 - **"Another passage" deals from a shuffled deck**, it doesn't pick at random.
   Random repeats often enough to look broken. The deck reshuffles only when all

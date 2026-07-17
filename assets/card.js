@@ -16,6 +16,51 @@
 
   var DISPLAY = '"Cormorant Garamond", "EB Garamond", Georgia, serif';
 
+  /* The book uses emphasis, and it's the poet's, not decoration: an italic
+     "are", a bold stanza in The nutshell. Lines carry it as markdown-lite
+     (*italic*, **bold**); a card that dropped it would misquote the book. */
+  function parseRuns(line) {
+    if (Array.isArray(line)) return line;
+    var out = [], re = /(\*\*[^*]+\*\*|\*[^*]+\*)/g, last = 0, m;
+    while ((m = re.exec(line)) !== null) {
+      if (m.index > last) out.push({ t: line.slice(last, m.index), s: 'r' });
+      var tok = m[0];
+      if (tok.slice(0, 2) === '**') out.push({ t: tok.slice(2, -2), s: 'b' });
+      else out.push({ t: tok.slice(1, -1), s: 'i' });
+      last = re.lastIndex;
+    }
+    if (last < line.length) out.push({ t: line.slice(last), s: 'r' });
+    return out.length ? out : [{ t: line, s: 'r' }];
+  }
+
+  function fontFor(s, size) {
+    if (s === 'i') return 'italic 300 ' + size + 'px ' + DISPLAY;
+    if (s === 'b') return '600 ' + size + 'px ' + DISPLAY;
+    return '300 ' + size + 'px ' + DISPLAY;
+  }
+
+  function lineWidth(ctx, runs, size) {
+    var w = 0;
+    for (var i = 0; i < runs.length; i++) {
+      ctx.font = fontFor(runs[i].s, size);
+      w += ctx.measureText(runs[i].t).width;
+    }
+    return w;
+  }
+
+  /* Draw a line centred, run by run, so italic and bold sit inline. */
+  function drawRuns(ctx, runs, cx, y, size) {
+    var prev = ctx.textAlign;
+    ctx.textAlign = 'left';
+    var x = cx - lineWidth(ctx, runs, size) / 2;
+    for (var i = 0; i < runs.length; i++) {
+      ctx.font = fontFor(runs[i].s, size);
+      ctx.fillText(runs[i].t, x, y);
+      x += ctx.measureText(runs[i].t).width;
+    }
+    ctx.textAlign = prev;
+  }
+
   function roundRect(ctx, x, y, w, h, r) {
     ctx.beginPath();
     ctx.moveTo(x + r, y);
@@ -28,10 +73,9 @@
 
   /* Widest natural line at a given font size. */
   function widestLine(ctx, lines, size) {
-    ctx.font = '300 ' + size + 'px ' + DISPLAY;
     var max = 0;
     for (var i = 0; i < lines.length; i++) {
-      max = Math.max(max, ctx.measureText(lines[i]).width);
+      max = Math.max(max, lineWidth(ctx, lines[i], size));
     }
     return max;
   }
@@ -70,7 +114,7 @@
   function render(canvas, quote, format, theme, meta) {
     var f = FORMATS[format] || FORMATS.square;
     var t = THEMES[theme] || THEMES.ink;
-    var lines = quote.lines;
+    var lines = quote.lines.map(parseRuns);
 
     canvas.width = f.w;
     canvas.height = f.h;
@@ -112,9 +156,8 @@
     ctx.fillStyle = t.text;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.font = '300 ' + size + 'px ' + DISPLAY;
     for (var i = 0; i < lines.length; i++) {
-      ctx.fillText(lines[i], cx, top + i * lineH + lineH / 2);
+      drawRuns(ctx, lines[i], cx, top + i * lineH + lineH / 2, size);
     }
 
     // Divider
@@ -151,5 +194,5 @@
     });
   }
 
-  global.QuoteCard = { render: render, toBlob: toBlob, FORMATS: FORMATS };
+  global.QuoteCard = { render: render, toBlob: toBlob, FORMATS: FORMATS, parseRuns: parseRuns };
 })(window);

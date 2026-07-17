@@ -21,6 +21,9 @@
   var state = {
     data: null,
     poemsById: {},
+    fullPoems: [],     // full text, from poems.json
+    fullById: {},
+    stanzaById: {},    // every stanza in the book, shareable by id
     current: null,
     deck: [],          // shuffled ids not yet shown
     format: 'square',
@@ -35,17 +38,32 @@
   var grid = $('#quote-grid');
 
   /* ---------- load ---------- */
-  fetch('data/quotes.json')
-    .then(function (r) {
-      if (!r.ok) throw new Error('HTTP ' + r.status);
+  Promise.all([
+    fetch('data/quotes.json').then(function (r) {
+      if (!r.ok) throw new Error('quotes ' + r.status);
+      return r.json();
+    }),
+    fetch('data/poems.json').then(function (r) {
+      if (!r.ok) throw new Error('poems ' + r.status);
       return r.json();
     })
-    .then(function (data) {
+  ])
+    .then(function (both) {
+      var data = both[0];
       state.data = data;
+      state.fullPoems = both[1].poems;
       data.poems.forEach(function (p) { state.poemsById[p.id] = p; });
+      // index every stanza by id so it can be shown, shared and linked
+      state.fullPoems.forEach(function (p) {
+        state.fullById[p.id] = p;
+        p.stanzas.forEach(function (s) {
+          state.stanzaById[s.id] = { id: s.id, poem: p.id, lines: s.lines };
+        });
+      });
       setToggleLabel(false);
       buildFilters();
       apply();
+      buildPoemIndex();
       start();
     })
     .catch(function (err) {
@@ -80,8 +98,11 @@
     show(byId(id));
   }
 
+  /* An id may be a curated passage (wlng-1) or any stanza in the book
+     (the-nutshell-s3). Both are shareable; curated ids came first, so they win. */
   function byId(id) {
-    return state.data.quotes.filter(function (q) { return q.id === id; })[0];
+    return state.data.quotes.filter(function (q) { return q.id === id; })[0]
+        || state.stanzaById[id];
   }
 
   /* ---------- the stage ---------- */
@@ -116,6 +137,14 @@
   }
 
   function start() {
+    // A shared poem link must open that poem, not the front page.
+    var pm = /#poem=([\w-]+)/.exec(location.hash);
+    if (pm && state.fullById[pm[1]]) {
+      refillDeck();
+      draw();
+      showPoem(pm[1], true);
+      return;
+    }
     var m = /#q=([\w-]+)/.exec(location.hash);
     var q = m && byId(m[1]);
     refillDeck();
@@ -214,6 +243,103 @@
     navigator.clipboard.writeText(permalink())
       .then(function () { status('Link copied.'); })
       .catch(function () { status('Copy failed.'); });
+  });
+
+  /* ---------- the poems ---------- */
+
+  /* Render markdown-lite emphasis as real elements. Built as nodes, never as
+     innerHTML — the poems are data, and data never becomes markup here. */
+  function runsToNodes(line) {
+    var frag = document.createDocumentFragment();
+    QuoteCard.parseRuns(line).forEach(function (r) {
+      if (r.s === 'i') {
+        var em = document.createElement('em'); em.textContent = r.t; frag.appendChild(em);
+      } else if (r.s === 'b') {
+        var st = document.createElement('strong'); st.textContent = r.t; frag.appendChild(st);
+      } else {
+        frag.appendChild(document.createTextNode(r.t));
+      }
+    });
+    return frag;
+  }
+
+  function buildPoemIndex() {
+    var ul = $('#poem-index');
+    ul.innerHTML = '';
+    state.fullPoems.forEach(function (p) {
+      var li = document.createElement('li');
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'poem-link';
+      var t = document.createElement('span');
+      t.className = 'pl-title';
+      t.textContent = p.title;
+      var m = document.createElement('span');
+      m.className = 'pl-meta';
+      m.textContent = p.stanzas.length + ' stanzas · p.' + p.page;
+      b.appendChild(t); b.appendChild(m);
+      b.addEventListener('click', function () { showPoem(p.id, true); });
+      li.appendChild(b);
+      ul.appendChild(li);
+    });
+  }
+
+  function showPoem(pid, scroll) {
+    var p = state.fullById[pid];
+    if (!p) return;
+    $('#poem-index').hidden = true;
+    $('#poem').hidden = false;
+    $('#poem-title').textContent = p.title;
+    $('#poem-meta').textContent = 'from “I came to be free” · page ' + p.page;
+    $('#poem-status').textContent = '';
+
+    var body = $('#poem-body');
+    body.innerHTML = '';
+    p.stanzas.forEach(function (s) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'stanza';
+      b.id = s.id;
+      b.setAttribute('aria-label', 'Make a card of: ' + s.lines.join(' / ').replace(/\*/g, ''));
+      var pre = document.createElement('p');
+      pre.className = 'stanza-lines';
+      s.lines.forEach(function (line, i) {
+        if (i) pre.appendChild(document.createElement('br'));
+        pre.appendChild(runsToNodes(line));
+      });
+      var cue = document.createElement('span');
+      cue.className = 'stanza-cue';
+      cue.textContent = 'Share ↑';
+      b.appendChild(pre);
+      b.appendChild(cue);
+      b.addEventListener('click', function () {
+        show(state.stanzaById[s.id]);
+        document.getElementById('stage').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+      body.appendChild(b);
+    });
+
+    history.replaceState(null, '', '#poem=' + pid);
+    if (scroll) $('#poems').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function hidePoem() {
+    $('#poem').hidden = true;
+    $('#poem-index').hidden = false;
+    history.replaceState(null, '', location.pathname + location.search);
+  }
+
+  $('#poem-back').addEventListener('click', hidePoem);
+
+  $('#copy-poem-link').addEventListener('click', function () {
+    var m = /#poem=([\w-]+)/.exec(location.hash);
+    var pid = m ? m[1] : null;
+    if (!pid) return;
+    var url = location.origin + location.pathname + '#poem=' + pid;
+    navigator.clipboard.writeText(url)
+      .then(function () { $('#poem-status').textContent = 'Link copied.'; })
+      .catch(function () { $('#poem-status').textContent = 'Copy failed.'; });
+    setTimeout(function () { $('#poem-status').textContent = ''; }, 2600);
   });
 
   /* ---------- the library ---------- */
