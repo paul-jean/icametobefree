@@ -185,9 +185,15 @@
     countView();
     var t = routeTarget();
 
+    /* An old "#q=" link is the ONE case where the URL is not already right: it
+       routes correctly but leaves the address bar holding the un-shareable
+       shape, so the next person to copy it hits the same dead preview. Upgrade
+       it in place — on arrival only, never while responding to Back. */
+    var fix = initial && t && t.via === 'hash' ? 'replace' : 'none';
+
     if (t && t.kind === 'poem' && state.fullById[t.id]) {
       if (initial) draw(false);     // leave a passage on the stage behind them
-      showPoem(t.id, true, 'none'); // responding to the URL, don't rewrite it
+      showPoem(t.id, true, fix);
       return;
     }
     // Backing out past the poem must actually close it, or the URL says one
@@ -196,10 +202,10 @@
 
     var q = t && t.kind === 'q' && byId(t.id);
     if (q) {
-      // Arrived on a shared link, or came back via Back/Forward. Either way the
-      // URL is already right — 'none' so we don't fight the history stack.
+      // Came back via Back/Forward, or arrived on a /q/ link: the URL is already
+      // right, so 'none' — pushing there would fight the history stack.
       state.deck = state.deck.filter(function (id) { return id !== q.id; });
-      show(q, 'none');
+      show(q, fix);
     } else if (initial) {
       draw(false);
     }
@@ -277,13 +283,13 @@
      copied straight into a chat and preview properly. */
   function routeTarget() {
     var m = location.pathname.match(/\/q\/([\w-]+)\/?$/);
-    if (m) return { kind: 'q', id: m[1] };
+    if (m) return { kind: 'q', id: m[1], via: 'path' };
     m = location.pathname.match(/\/poem\/([\w-]+)\/?$/);
-    if (m) return { kind: 'poem', id: m[1] };
+    if (m) return { kind: 'poem', id: m[1], via: 'path' };
     m = /#q=([\w-]+)/.exec(location.hash);
-    if (m) return { kind: 'q', id: m[1] };
+    if (m) return { kind: 'q', id: m[1], via: 'hash' };
     m = /#poem=([\w-]+)/.exec(location.hash);
-    if (m) return { kind: 'poem', id: m[1] };
+    if (m) return { kind: 'poem', id: m[1], via: 'hash' };
     return null;
   }
 
