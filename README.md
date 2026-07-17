@@ -118,9 +118,30 @@ All four A records — they're GitHub's load balancers, not alternatives. The
 `www` CNAME value is the *user* domain (`paul-jean.github.io`), not the project
 path; GitHub works out the repo from the CNAME file.
 
-Then **Settings → Pages → Custom domain** → `icametobefree.xyz` → Save, and tick
-**Enforce HTTPS** once the certificate is issued (usually minutes, up to an hour;
-the checkbox stays greyed out until then).
+Then point GitHub at it. The order matters, and there's one trap:
+
+```bash
+gh api -X PUT repos/paul-jean/icametobefree/pages -f cname=icametobefree.xyz
+gh workflow run deploy.yml && gh run watch     # ← don't skip this
+gh api -X PUT repos/paul-jean/icametobefree/pages -F https_enforced=true
+```
+
+**The trap:** setting `cname` resets the Pages deployment state to
+`"status": null`. With `build_type: workflow`, GitHub does *not* republish on its
+own — so the domain resolves, hits GitHub, and gets GitHub's own 404 ("There
+isn't a GitHub Pages site here") because no build is attached to it. It looks
+exactly like a DNS or domain failure and is neither. Re-running the workflow
+attaches the build and fixes it. Check the state any time with:
+
+```bash
+gh api repos/paul-jean/icametobefree/pages
+```
+
+`status: null` means "needs a deploy". `cname` shows the domain GitHub thinks it
+owns, and `https_certificate.state` tells you whether HTTPS can be enforced yet.
+
+**Note the flags:** `-f` sends strings, `-F` converts types. `cname` is a string
+so `-f` is right; `https_enforced` is a boolean and needs `-F`, or you get a 422.
 
 Without a `CNAME` file the site falls back to `paul-jean.github.io/icametobefree/`
 automatically — nothing breaks, the URLs just change.
