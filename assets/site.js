@@ -190,6 +190,12 @@
 
   $('#another').addEventListener('click', draw);
 
+  /* Tap the card itself for the next passage — the obvious gesture on a phone,
+     where "press space" is meaningless. Bound to the canvas, not its container,
+     so tapping the empty space beside the card doesn't fire.
+     Keyboard/AT users aren't stranded: the button beside it does the same thing. */
+  canvas.addEventListener('click', draw);
+
   // Space / N for another. Ignore it while typing in the search box.
   document.addEventListener('keydown', function (e) {
     if (e.target.matches('input, select, textarea')) return;
