@@ -92,10 +92,14 @@
     }
   }
 
-  function draw() {
+  /* draw(true) = the reader asked for another (button, tap, space) — push a
+     history entry so Back returns the passage they just lost.
+     draw(false) = the first draw on load — replace, so Back leaves the site
+     rather than landing on a bare "/" with a card already on screen. */
+  function draw(push) {
     if (!state.deck.length) refillDeck(state.current && state.current.id);
     var id = state.deck.pop();
-    show(byId(id));
+    show(byId(id), push ? 'push' : 'replace');
   }
 
   /* An id may be a curated passage (wlng-1) or any stanza in the book
@@ -118,13 +122,20 @@
     }, state.format, state.cardTheme, meta());
   }
 
-  function show(q) {
+  /* mode: 'push' adds a history entry (Back returns here), 'replace' swaps the
+     current one, 'none' leaves history alone — used when we're responding TO a
+     history change and the URL is already correct. Pushing there would fight
+     the Back button and trap the reader. */
+  function show(q, mode) {
     if (!q) return;
     state.current = q;
     $('#stage-poem').textContent = 'from “' + state.poemsById[q.poem].title + '”';
     $('#stage-fallback').hidden = true;
     $('#status').textContent = '';
-    history.replaceState(null, '', '#q=' + q.id);
+
+    var hash = '#q=' + q.id;
+    if (mode === 'push' && location.hash !== hash) history.pushState(null, '', hash);
+    else if (mode !== 'none' && location.hash !== hash) history.replaceState(null, '', hash);
 
     canvas.classList.add('is-changing');
     var render = function () {
@@ -167,18 +178,23 @@
     countView();
     var pm = /#poem=([\w-]+)/.exec(location.hash);
     if (pm && state.fullById[pm[1]]) {
-      if (initial) draw();          // leave a passage on the stage behind them
-      showPoem(pm[1], true);
+      if (initial) draw(false);     // leave a passage on the stage behind them
+      showPoem(pm[1], true, 'none');   // responding to the URL, don't rewrite it
       return;
     }
+    // Backing out past the poem must actually close it, or the URL says one
+    // thing and the screen shows another.
+    if (!initial && $('#poem') && !$('#poem').hidden) hidePoem('none');
+
     var m = /#q=([\w-]+)/.exec(location.hash);
     var q = m && byId(m[1]);
     if (q) {
-      // Arrived on a shared link — honour it, and don't repeat it on first draw.
+      // Arrived on a shared link, or came back via Back/Forward. Either way the
+      // URL is already right — 'none' so we don't fight the history stack.
       state.deck = state.deck.filter(function (id) { return id !== q.id; });
-      show(q);
+      show(q, 'none');
     } else if (initial) {
-      draw();
+      draw(false);
     }
   }
 
@@ -188,20 +204,20 @@
     window.addEventListener('hashchange', function () { route(false); });
   }
 
-  $('#another').addEventListener('click', draw);
+  $('#another').addEventListener('click', function () { draw(true); });
 
   /* Tap the card itself for the next passage — the obvious gesture on a phone,
      where "press space" is meaningless. Bound to the canvas, not its container,
      so tapping the empty space beside the card doesn't fire.
      Keyboard/AT users aren't stranded: the button beside it does the same thing. */
-  canvas.addEventListener('click', draw);
+  canvas.addEventListener('click', function () { draw(true); });
 
   // Space / N for another. Ignore it while typing in the search box.
   document.addEventListener('keydown', function (e) {
     if (e.target.matches('input, select, textarea')) return;
     if (e.key === ' ' || e.key === 'n' || e.key === 'N') {
       e.preventDefault();
-      draw();
+      draw(true);
     }
   });
 
@@ -315,13 +331,13 @@
       m.className = 'pl-meta';
       m.textContent = p.stanzas.length + ' stanzas · p.' + p.page;
       b.appendChild(t); b.appendChild(m);
-      b.addEventListener('click', function () { showPoem(p.id, true); });
+      b.addEventListener('click', function () { showPoem(p.id, true, 'push'); });
       li.appendChild(b);
       ul.appendChild(li);
     });
   }
 
-  function showPoem(pid, scroll) {
+  function showPoem(pid, scroll, mode) {
     var p = state.fullById[pid];
     if (!p) return;
     $('#poem-index').hidden = true;
@@ -350,23 +366,28 @@
       b.appendChild(pre);
       b.appendChild(cue);
       b.addEventListener('click', function () {
-        show(state.stanzaById[s.id]);
+        // push: Back should return them to the poem they were reading
+        show(state.stanzaById[s.id], 'push');
         document.getElementById('stage').scrollIntoView({ behavior: 'smooth', block: 'start' });
       });
       body.appendChild(b);
     });
 
-    history.replaceState(null, '', '#poem=' + pid);
+    var hash = '#poem=' + pid;
+    if (mode === 'push' && location.hash !== hash) history.pushState(null, '', hash);
+    else if (mode !== 'none' && location.hash !== hash) history.replaceState(null, '', hash);
     if (scroll) $('#poems').scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
-  function hidePoem() {
+  function hidePoem(mode) {
     $('#poem').hidden = true;
     $('#poem-index').hidden = false;
-    history.replaceState(null, '', location.pathname + location.search);
+    // 'none' when we're reacting to Back — rewriting the URL mid-navigation
+    // would fight the history stack we're trying to honour.
+    if (mode !== 'none') history.replaceState(null, '', location.pathname + location.search);
   }
 
-  $('#poem-back').addEventListener('click', hidePoem);
+  $('#poem-back').addEventListener('click', function () { hidePoem(); });
 
   $('#copy-poem-link').addEventListener('click', function () {
     var m = /#poem=([\w-]+)/.exec(location.hash);
@@ -526,7 +547,7 @@
       btn.appendChild(p);
       btn.appendChild(foot);
       btn.addEventListener('click', function () {
-        show(q);
+        show(q, 'push');
         document.getElementById('stage').scrollIntoView({ behavior: 'smooth', block: 'start' });
       });
       li.appendChild(btn);
