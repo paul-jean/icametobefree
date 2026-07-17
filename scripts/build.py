@@ -4,9 +4,10 @@
 The site itself is plain static files — this script only adds the things that
 have to exist as real URLs on disk:
 
-  /q/<id>/index.html   one page per quote, carrying the quote in its OG tags so
-                       that pasting the link into a chat or social app shows the
-                       words. It then bounces the reader to /#q=<id>.
+  /q/<id>/index.html     the app itself, with that passage's OG tags. A real URL
+                         a crawler can fetch AND the working site — so the
+                         address bar always holds something shareable.
+  /poem/<id>/index.html  the same, per poem.
   /sitemap.xml         so search engines find every quote.
   /404.html, /robots.txt, /CNAME
 
@@ -127,64 +128,53 @@ if CNAME_FILE.exists():
     shutil.copy2(CNAME_FILE, OUT / "CNAME")
 
 # --- per-quote share pages ------------------------------------------------
-PAGE = """<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{title}</title>
-<meta name="description" content="{desc}">
-<link rel="canonical" href="{base}/q/{qid}/">
-<meta property="og:type" content="article">
-<meta property="og:site_name" content="{book}">
-<meta property="og:title" content="{title}">
-<meta property="og:description" content="{desc}">
-<meta property="og:image" content="{og}">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta property="og:url" content="{base}/q/{qid}/">
-<meta name="twitter:card" content="summary_large_image">
-<link rel="icon" href="{base}/favicon.ico" sizes="any">
-<link rel="icon" href="{base}/assets/favicon.svg" type="image/svg+xml">
-<meta name="theme-color" content="#0b0b0d">
-<meta http-equiv="refresh" content="0; url={base}/#q={qid}">
-<link rel="stylesheet" href="{base}/assets/site.css">
-</head>
-<body>
-<main class="about">
-  <blockquote><p style="font-family:var(--display);font-size:1.4rem;line-height:1.8">{lines_html}</p></blockquote>
-  <p>— {author}, <em>{book}</em>, from “{poem}”</p>
-  <p><a class="btn" href="{base}/#q={qid}">Open on the site</a></p>
-</main>
-<script>location.replace({redirect});</script>
-</body>
-</html>
-"""
-
 qdir = OUT / "q"
 qdir.mkdir()
 urls = [f"{BASE}/"]
 
 
+def app_page(canonical, title, desc, og):
+    """The real app, with this passage's preview tags.
+
+    Served at /q/<id>/ and /poem/<id>/ as well as /. That's what lets the
+    address bar hold a URL people can copy straight into a chat: it's a real
+    page a crawler can fetch, AND the working site. A "#q=" fragment never
+    reaches the server, so it can only ever preview as the homepage — which is
+    exactly what happened when the first link went out on WhatsApp."""
+    p = index
+    p = p.replace('<link rel="canonical" href="__BASE__/" />',
+                  f'<link rel="canonical" href="{canonical}" />')
+    p = p.replace('<meta property="og:url" content="__BASE__/" />',
+                  f'<meta property="og:url" content="{canonical}" />')
+    p = p.replace('<meta property="og:image" content="__BASE__/assets/og-default.png" />',
+                  f'<meta property="og:image" content="{og}" />\n'
+                  f'    <meta property="og:image:width" content="1200" />\n'
+                  f'    <meta property="og:image:height" content="630" />')
+    p = re.sub(r'<meta\s+property="og:title"\s+content="[^"]*"\s*/>',
+               f'<meta property="og:title" content="{title}" />', p, count=1)
+    p = re.sub(r'<meta\s+property="og:description"\s+content="[^"]*"\s*/>',
+               f'<meta property="og:description" content="{desc}" />', p, count=1)
+    p = re.sub(r'<meta\s+name="description"\s+content="[^"]*"\s*/>',
+               f'<meta name="description" content="{desc}" />', p, count=1)
+    p = p.replace('<title>I came to be free — Poems by PJ Starling</title>',
+                  f'<title>{title}</title>')
+    return p.replace("__BASE__", BASE)
+
+
 def write_quote_page(qid, lines, poem_title):
     og = og_for(qid, lines)            # the card itself, as the preview image
-    lines = [strip_md(l) for l in lines]
-    page = PAGE.format(
-        base=BASE,
-        qid=qid,
-        og=og,
-        book=html.escape(book["title"]),
-        author=html.escape(book["author"]),
-        poem=html.escape(poem_title),
-        title=html.escape(f"“{lines[0]}…” — {book['author']}"),
-        desc=html.escape(" / ".join(lines)),
-        lines_html="<br>".join(html.escape(l) for l in lines),
-        redirect=json.dumps(f"{BASE}/#q={qid}"),
+    plain = [strip_md(l) for l in lines]
+    canonical = f"{BASE}/q/{qid}/"
+    page = app_page(
+        canonical,
+        html.escape(f"“{plain[0]}…” — {book['author']}"),
+        html.escape(" / ".join(plain)),
+        og,
     )
     d = qdir / qid
     d.mkdir(parents=True, exist_ok=True)
     (d / "index.html").write_text(page, encoding="utf-8")
-    urls.append(f"{BASE}/q/{qid}/")
+    urls.append(canonical)
 
 
 # the curated passages (their ids are already in the wild — never rename)
@@ -199,63 +189,23 @@ for p in full["poems"]:
             raise SystemExit(f"stanza id collides with a curated quote id: {s['id']}")
         write_quote_page(s["id"], s["lines"], p["title"])
 
-# ---- one page per poem, for sharing a whole poem as a link ----------------
-POEM_PAGE = """<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{title} — {author}</title>
-<meta name="description" content="{desc}">
-<link rel="canonical" href="{base}/poem/{pid}/">
-<meta property="og:type" content="article">
-<meta property="og:site_name" content="{book}">
-<meta property="og:title" content="{title} — {author}">
-<meta property="og:description" content="{desc}">
-<meta property="og:image" content="{og}">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta property="og:url" content="{base}/poem/{pid}/">
-<meta name="twitter:card" content="summary_large_image">
-<link rel="icon" href="{base}/favicon.ico" sizes="any">
-<link rel="icon" href="{base}/assets/favicon.svg" type="image/svg+xml">
-<meta name="theme-color" content="#0b0b0d">
-<meta http-equiv="refresh" content="0; url={base}/#poem={pid}">
-<link rel="stylesheet" href="{base}/assets/site.css">
-</head>
-<body>
-<main class="about">
-  <h2>{title}</h2>
-  <blockquote><p style="font-family:var(--display);font-size:1.25rem;line-height:1.85">{first}</p></blockquote>
-  <p>— {author}, <em>{book}</em></p>
-  <p><a class="btn" href="{base}/#poem={pid}">Read the poem</a></p>
-</main>
-<script>location.replace({redirect});</script>
-</body>
-</html>
-"""
-
+# ---- one page per poem: the app, with the poem's preview tags -------------
 pdir = OUT / "poem"
 pdir.mkdir()
 for p in full["poems"]:
-    flat = [strip_md(l) for s in p["stanzas"] for l in s["lines"]]
     first = [strip_md(l) for l in p["stanzas"][0]["lines"]]
     og = og_for("poem-" + p["id"], p["stanzas"][0]["lines"])
-    page = POEM_PAGE.format(
-        base=BASE,
-        pid=p["id"],
-        og=og,
-        book=html.escape(book["title"]),
-        author=html.escape(book["author"]),
-        title=html.escape(p["title"]),
-        desc=html.escape(" / ".join(flat[:4])),
-        first="<br>".join(html.escape(l) for l in first),
-        redirect=json.dumps(f"{BASE}/#poem={p['id']}"),
+    canonical = f"{BASE}/poem/{p['id']}/"
+    page = app_page(
+        canonical,
+        html.escape(f"{p['title']} — {book['author']}"),
+        html.escape(" / ".join(first)),
+        og,
     )
     d = pdir / p["id"]
     d.mkdir()
     (d / "index.html").write_text(page, encoding="utf-8")
-    urls.append(f"{BASE}/poem/{p['id']}/")
+    urls.append(canonical)
 
 # --- sitemap / robots / 404 ----------------------------------------------
 sitemap = "\n".join(f"  <url><loc>{u}</loc></url>" for u in urls)

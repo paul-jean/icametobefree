@@ -37,13 +37,17 @@
   var canvas = $('#card-canvas');
   var grid = $('#quote-grid');
 
-  /* ---------- load ---------- */
+  /* ---------- load ----------
+     base() not a relative path: the app is also served from /q/<id>/ and
+     /poem/<id>/, where "data/quotes.json" would resolve to
+     /q/<id>/data/quotes.json and 404. Every shared link would open a page
+     that couldn't load the poems. */
   Promise.all([
-    fetch('data/quotes.json').then(function (r) {
+    fetch(base() + 'data/quotes.json').then(function (r) {
       if (!r.ok) throw new Error('quotes ' + r.status);
       return r.json();
     }),
-    fetch('data/poems.json').then(function (r) {
+    fetch(base() + 'data/poems.json').then(function (r) {
       if (!r.ok) throw new Error('poems ' + r.status);
       return r.json();
     })
@@ -133,9 +137,12 @@
     $('#stage-fallback').hidden = true;
     $('#status').textContent = '';
 
-    var hash = '#q=' + q.id;
-    if (mode === 'push' && location.hash !== hash) history.pushState(null, '', hash);
-    else if (mode !== 'none' && location.hash !== hash) history.replaceState(null, '', hash);
+    // Put the SHAREABLE url in the address bar. People copy from there — the
+    // whole point of this site is sharing, so what's on screen must be what
+    // travels. "#q=<id>" never reaches a server and previews as the homepage.
+    var url = base() + 'q/' + q.id + '/';
+    if (mode === 'push' && location.pathname !== url) history.pushState(null, '', url);
+    else if (mode !== 'none' && location.pathname !== url) history.replaceState(null, '', url);
 
     canvas.classList.add('is-changing');
     var render = function () {
@@ -176,18 +183,18 @@
      nothing else, which looks exactly like a broken site. */
   function route(initial) {
     countView();
-    var pm = /#poem=([\w-]+)/.exec(location.hash);
-    if (pm && state.fullById[pm[1]]) {
+    var t = routeTarget();
+
+    if (t && t.kind === 'poem' && state.fullById[t.id]) {
       if (initial) draw(false);     // leave a passage on the stage behind them
-      showPoem(pm[1], true, 'none');   // responding to the URL, don't rewrite it
+      showPoem(t.id, true, 'none'); // responding to the URL, don't rewrite it
       return;
     }
     // Backing out past the poem must actually close it, or the URL says one
     // thing and the screen shows another.
     if (!initial && $('#poem') && !$('#poem').hidden) hidePoem('none');
 
-    var m = /#q=([\w-]+)/.exec(location.hash);
-    var q = m && byId(m[1]);
+    var q = t && t.kind === 'q' && byId(t.id);
     if (q) {
       // Arrived on a shared link, or came back via Back/Forward. Either way the
       // URL is already right — 'none' so we don't fight the history stack.
@@ -201,6 +208,9 @@
   function start() {
     refillDeck();
     route(true);
+    // popstate for path navigation (Back/Forward), hashchange for older
+    // "#q=" links someone may still have. Path changes never fire hashchange.
+    window.addEventListener('popstate', function () { route(false); });
     window.addEventListener('hashchange', function () { route(false); });
   }
 
@@ -253,10 +263,28 @@
     return 'i-came-to-be-free-' + state.current.id + '-' + state.format + '.png';
   }
 
-  /* The app root — "/" normally, "/icametobefree/" on the github.io fallback. */
+  /* The app root. The app is served at "/" AND at "/q/<id>/" and "/poem/<id>/",
+     so the root has to be derived by stripping those, not read off the URL.
+     ("/icametobefree/" on the github.io fallback.) */
   function base() {
     var p = location.pathname.replace(/index\.html$/, '');
+    p = p.replace(/(q|poem)\/[\w-]+\/?$/, '');
     return p.charAt(p.length - 1) === '/' ? p : p + '/';
+  }
+
+  /* What the URL is asking for — path first (the shareable form), hash second
+     (older links, still honoured). This is why the address bar can now be
+     copied straight into a chat and preview properly. */
+  function routeTarget() {
+    var m = location.pathname.match(/\/q\/([\w-]+)\/?$/);
+    if (m) return { kind: 'q', id: m[1] };
+    m = location.pathname.match(/\/poem\/([\w-]+)\/?$/);
+    if (m) return { kind: 'poem', id: m[1] };
+    m = /#q=([\w-]+)/.exec(location.hash);
+    if (m) return { kind: 'q', id: m[1] };
+    m = /#poem=([\w-]+)/.exec(location.hash);
+    if (m) return { kind: 'poem', id: m[1] };
+    return null;
   }
 
   /* Share the /q/<id>/ page, NOT "#q=<id>".
@@ -384,9 +412,9 @@
       body.appendChild(b);
     });
 
-    var hash = '#poem=' + pid;
-    if (mode === 'push' && location.hash !== hash) history.pushState(null, '', hash);
-    else if (mode !== 'none' && location.hash !== hash) history.replaceState(null, '', hash);
+    var url = base() + 'poem/' + pid + '/';
+    if (mode === 'push' && location.pathname !== url) history.pushState(null, '', url);
+    else if (mode !== 'none' && location.pathname !== url) history.replaceState(null, '', url);
     if (scroll) $('#poems').scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
@@ -395,7 +423,7 @@
     $('#poem-index').hidden = false;
     // 'none' when we're reacting to Back — rewriting the URL mid-navigation
     // would fight the history stack we're trying to honour.
-    if (mode !== 'none') history.replaceState(null, '', location.pathname + location.search);
+    if (mode !== 'none') history.replaceState(null, '', base() + location.search);
   }
 
   $('#poem-back').addEventListener('click', function () { hidePoem(); });
