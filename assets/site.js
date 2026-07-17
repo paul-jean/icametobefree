@@ -136,25 +136,31 @@
     else render();
   }
 
-  function start() {
-    // A shared poem link must open that poem, not the front page.
+  /* Route from the hash. Called on load AND on hashchange — without the
+     listener, the Back button and any in-page #poem= link change the URL and
+     nothing else, which looks exactly like a broken site. */
+  function route(initial) {
     var pm = /#poem=([\w-]+)/.exec(location.hash);
     if (pm && state.fullById[pm[1]]) {
-      refillDeck();
-      draw();
+      if (initial) draw();          // leave a passage on the stage behind them
       showPoem(pm[1], true);
       return;
     }
     var m = /#q=([\w-]+)/.exec(location.hash);
     var q = m && byId(m[1]);
-    refillDeck();
     if (q) {
       // Arrived on a shared link — honour it, and don't repeat it on first draw.
       state.deck = state.deck.filter(function (id) { return id !== q.id; });
       show(q);
-    } else {
+    } else if (initial) {
       draw();
     }
+  }
+
+  function start() {
+    refillDeck();
+    route(true);
+    window.addEventListener('hashchange', function () { route(false); });
   }
 
   $('#another').addEventListener('click', draw);
