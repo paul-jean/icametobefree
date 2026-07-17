@@ -1,0 +1,3 @@
+# Build-time only. The site itself ships no dependencies — this is what renders
+# the per-passage link-preview cards in scripts/ogcards.py.
+pillow==11.3.0

@@ -21,6 +21,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # build.py renders the link-preview cards with Pillow. The runner is clean
+      # — anything not installed here is not present, however well it works on
+      # a laptop that happens to have it.
+      - name: Install build dependencies
+        run: python3 -m pip install --quiet -r requirements.txt
+
       - name: Validate quotes.json
         run: python3 scripts/check.py
 
