@@ -411,8 +411,8 @@
         .catch(function () {
           btn.disabled = false;
           status.innerHTML = 'That didn’t send, sorry. Please email ' +
-            '<a href="mailto:paul.jean.letourneau@gmail.com?subject=Reading%20request">' +
-            'paul.jean.letourneau@gmail.com</a> instead.';
+            '<a href="mailto:readings@starlingpoetry.xyz?subject=Reading%20request">' +
+            'readings@starlingpoetry.xyz</a> instead.';
         });
     });
   }

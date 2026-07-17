@@ -277,6 +277,30 @@ section{padding:clamp(3rem,7vw,5.5rem) clamp(1.25rem,4vw,2.5rem)}
   .book-copy p{margin-inline:auto}
   .buy-list{justify-content:center}
 }
+
+/* ---------- phones ----------
+   The brand plus five nav items need ~580px; a phone has ~390. Left in one row
+   they hang off the right edge and the whole page scrolls sideways. Stack the
+   header instead: brand on top, nav wrapped and centred beneath. */
+@media(max-width:640px){
+  .site-head{
+    flex-direction:column;gap:.55rem;padding:.7rem 1rem;
+  }
+  .brand{font-size:.78rem;letter-spacing:.18em}
+  .site-head nav{flex-wrap:wrap;justify-content:center;gap:.45rem .9rem}
+  .site-head nav a{font-size:.72rem;letter-spacing:.1em}
+  .site-head nav a.btn-ghost{padding:.38em .85em}
+
+  /* the header now costs more vertical, so give the card back some room */
+  #card-canvas{max-height:min(44vh,460px)}
+  .stage{padding:1rem 1rem 2.5rem}
+  .stage-actions{gap:.45rem}
+  .stage-actions .btn-ghost{font-size:.72rem;padding:.55em .9em}
+
+  /* long words and URLs are the other classic source of sideways scroll */
+  body{overflow-wrap:break-word}
+  .reading-form input,.reading-form select,.reading-form textarea{max-width:100%}
+}
 @media(prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   *{transition:none!important}
