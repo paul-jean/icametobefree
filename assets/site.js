@@ -253,8 +253,19 @@
     return 'i-came-to-be-free-' + state.current.id + '-' + state.format + '.png';
   }
 
+  /* The app root — "/" normally, "/icametobefree/" on the github.io fallback. */
+  function base() {
+    var p = location.pathname.replace(/index\.html$/, '');
+    return p.charAt(p.length - 1) === '/' ? p : p + '/';
+  }
+
+  /* Share the /q/<id>/ page, NOT "#q=<id>".
+     A fragment is never sent to the server — a crawler asked for "#q=isyn-3"
+     requests "/" and gets the generic homepage tags. The /q/ pages are real
+     URLs carrying the quote in their OG tags, and they bounce the reader
+     straight back to #q=<id>. Same destination, but it can actually preview. */
   function permalink() {
-    return location.origin + location.pathname + '#q=' + state.current.id;
+    return location.origin + base() + 'q/' + state.current.id + '/';
   }
 
   function shareText() {
@@ -393,7 +404,10 @@
     var m = /#poem=([\w-]+)/.exec(location.hash);
     var pid = m ? m[1] : null;
     if (!pid) return;
-    var url = location.origin + location.pathname + '#poem=' + pid;
+    // /poem/<id>/ — a real URL with the poem's opening stanza in its OG tags.
+    // "#poem=<id>" would preview as the generic homepage, since the fragment
+    // never reaches the server.
+    var url = location.origin + base() + 'poem/' + pid + '/';
     navigator.clipboard.writeText(url)
       .then(function () { $('#poem-status').textContent = 'Link copied.'; })
       .catch(function () { $('#poem-status').textContent = 'Copy failed.'; });

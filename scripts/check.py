@@ -90,6 +90,29 @@ for w in warnings:
 for e in errors:
     print(f"ERROR: {e}", file=sys.stderr)
 
+# ---- the two card renderers must agree ----
+# assets/card.js draws the live card; scripts/ogcards.py draws the preview image
+# a shared link shows. If one changes and the other doesn't, links start
+# previewing a card that doesn't match the site. These are the numbers that
+# would visibly diverge — cheap to check, expensive to miss.
+card_js = (ROOT / "assets" / "card.js").read_text(encoding="utf-8")
+og_py = (ROOT / "scripts" / "ogcards.py").read_text(encoding="utf-8")
+for label, pattern_js, pattern_py in [
+    ("wide format size", r"wide:\s*\{\s*w:\s*1200,\s*h:\s*630", r"^W, H = 1200, 630"),
+    ("line spacing 1.62", r"size \* 1\.62", r"LINE_RATIO = 1\.62"),
+    ("wide type cap 58", r"format === 'wide' \? 58", r"^CAP = 58"),
+    ("ink #0b0b0d", r"bg: '#0b0b0d'", r"^INK = \(11, 11, 13\)"),
+    ("cream #efe9dd", r"text: '#efe9dd'", r"^CREAM = \(239, 233, 221\)"),
+]:
+    in_js = re.search(pattern_js, card_js) is not None
+    in_py = re.search(pattern_py, og_py, re.M) is not None
+    if in_js != in_py:
+        errors.append(
+            f"card.js and ogcards.py disagree on {label!r} "
+            f"(card.js: {in_js}, ogcards.py: {in_py}) — the live card and the "
+            f"link-preview image would render differently"
+        )
+
 nlines = sum(len(s["lines"]) for p in full["poems"] for s in p["stanzas"])
 print(f"\n{len(data['quotes'])} curated quotes · {len(stanza_ids)} stanzas · "
       f"{nlines} lines across {len(full['poems'])} poems — "

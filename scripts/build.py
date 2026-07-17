@@ -18,6 +18,7 @@ import os
 import pathlib
 import re
 import shutil
+import sys
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 OUT = ROOT / "_site"
@@ -33,6 +34,32 @@ full_by_id = {p["id"]: p for p in full["poems"]}
 def strip_md(s):
     """Drop the *italic* / **bold** markers — meta tags take plain text."""
     return re.sub(r"\*+", "", s)
+
+
+# --- per-passage OG images -------------------------------------------------
+# A shared link should preview AS the card. These are generated here, into
+# _site/, so they never bloat the repo — only the 1.9MB of fonts is committed.
+sys.path.insert(0, str(ROOT / "scripts"))
+import ogcards  # noqa: E402
+
+if not ogcards.fonts_present():
+    raise SystemExit(
+        "assets/fonts/CormorantGaramond*.ttf missing — OG preview cards can't be\n"
+        "  rendered. Fetch them from the google/fonts repo (SIL OFL):\n"
+        "  https://github.com/google/fonts/tree/main/ofl/cormorantgaramond"
+    )
+
+OG_DIR = OUT / "assets" / "og"
+
+
+def og_for(qid, lines):
+    """Render one card and return its public URL.
+
+    Lines keep their *italic*/**bold** markers — ogcards parses them, exactly as
+    card.js does, so the poet's emphasis survives into the preview image."""
+    ogcards.render(lines, book["author"], book["title"], domain,
+                   OG_DIR / f"{qid}.png")
+    return f"{BASE}/assets/og/{qid}.png"
 
 
 def site_base():
@@ -66,7 +93,10 @@ if OUT.exists():
 OUT.mkdir()
 
 for name in ("assets", "data"):
-    shutil.copytree(ROOT / name, OUT / name)
+    # fonts/ is build-time only: the browser loads Cormorant from Google Fonts,
+    # so shipping 1.9MB of TTFs to every visitor would be pure waste.
+    shutil.copytree(ROOT / name, OUT / name,
+                    ignore=shutil.ignore_patterns("fonts"))
 
 # Root-level files that must keep their exact path. favicon.ico in particular:
 # browsers request /favicon.ico blind, without reading any <link> tag.
@@ -109,7 +139,9 @@ PAGE = """<!DOCTYPE html>
 <meta property="og:site_name" content="{book}">
 <meta property="og:title" content="{title}">
 <meta property="og:description" content="{desc}">
-<meta property="og:image" content="{base}/assets/og-default.png">
+<meta property="og:image" content="{og}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
 <meta property="og:url" content="{base}/q/{qid}/">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="{base}/favicon.ico" sizes="any">
@@ -135,10 +167,12 @@ urls = [f"{BASE}/"]
 
 
 def write_quote_page(qid, lines, poem_title):
+    og = og_for(qid, lines)            # the card itself, as the preview image
     lines = [strip_md(l) for l in lines]
     page = PAGE.format(
         base=BASE,
         qid=qid,
+        og=og,
         book=html.escape(book["title"]),
         author=html.escape(book["author"]),
         poem=html.escape(poem_title),
@@ -178,7 +212,9 @@ POEM_PAGE = """<!DOCTYPE html>
 <meta property="og:site_name" content="{book}">
 <meta property="og:title" content="{title} — {author}">
 <meta property="og:description" content="{desc}">
-<meta property="og:image" content="{base}/assets/og-default.png">
+<meta property="og:image" content="{og}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
 <meta property="og:url" content="{base}/poem/{pid}/">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="{base}/favicon.ico" sizes="any">
@@ -204,9 +240,11 @@ pdir.mkdir()
 for p in full["poems"]:
     flat = [strip_md(l) for s in p["stanzas"] for l in s["lines"]]
     first = [strip_md(l) for l in p["stanzas"][0]["lines"]]
+    og = og_for("poem-" + p["id"], p["stanzas"][0]["lines"])
     page = POEM_PAGE.format(
         base=BASE,
         pid=p["id"],
+        og=og,
         book=html.escape(book["title"]),
         author=html.escape(book["author"]),
         title=html.escape(p["title"]),
