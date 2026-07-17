@@ -138,9 +138,44 @@ Two things to keep an eye on:
 - **`.xyz` is cheap, which is why spammers like it.** A few corporate mail filters and link scanners treat the whole TLD with suspicion. It won't affect Instagram or texting, but if you ever email links to bookstores or reviewers, watch for silence that isn't really silence.
 - **Renewals — this one is not hypothetical.** `rule146.com` lapsed, was re-registered by a spam operation, and quietly inherited every visitor to `paul-jean.github.io` for months. Once quote cards are circulating with `icametobefree.xyz` printed on them, they can't be recalled, and a lapse hands that audience to whoever registers next. Auto-renew on, card on file current, on both domains.
 
-## Deliberately not doing
+## Analytics — GoatCounter, added 17 July 2026
 
-- **Analytics.** Adds a cookie banner and a privacy policy to a poetry site. If you want numbers later, use a cookieless one (Plausible, GoatCounter).
+`starlingpoetry.goatcounter.com` · free · cookieless · **no consent banner**.
+
+The plan originally said no analytics, on the grounds that it drags a cookie
+banner and a privacy policy behind it. That was wrong on the facts: a tool that
+sets no cookie, reads no storage and holds no personal data doesn't trigger the
+consent rules. PIPEDA and Quebec's Law 25 are keyed to *personal information*;
+GDPR/ePrivacy Art. 5(3) bites on *storing or accessing information on the
+device*. None of that happens here. (Not legal advice, and the Quebec position
+is untested — but most articles insisting otherwise are published by companies
+selling consent banners.)
+
+**Why GoatCounter over the alternatives:** Cloudflare Web Analytics is free and
+solid but **cannot do custom events at all**, so it could never answer the one
+question that matters. Plausible ($9/mo) and Fathom (~$15/mo) have no free tier.
+GoatCounter's free tier explicitly allows this — *"Running your personal website
+or small-to-medium business on it is fine"* — and does events with an HTML
+attribute and no code.
+
+### What it's set up to tell you
+
+**Which lines travel.** Counting is manual (`no_onload`) because the site is
+hash-routed — the default would file every poem and every shared stanza under
+"/". Now `#poem=gaman` and `#q=the-nutshell-s3` show up as themselves, so you
+can see *which* stanza a stranger opened.
+
+**Whether anyone shared.** Events on `card-downloaded`, `card-shared`,
+`text-copied`, `link-copied` — and `buy-*` on every bookseller link, which is the
+closest thing to a sale you can observe from here.
+
+### How to read it
+
+- **Expect about a third of visits to be missing.** Ad blockers eat client-side analytics, and GitHub Pages gives no server logs, so there's no way around it. The numbers are a floor, not a census.
+- **A single `card-downloaded` from someone who isn't you is the machine working.** That's the whole thesis of this site, evidenced.
+- **Don't check it daily.** Poetry moves in months. Checking a flat counter is a good way to conclude you've failed while the base rate is still doing its work.
+
+## Deliberately not doing
 - **A mailing list.** Real value, but it's a second job. Add it when you have a third book to announce.
 - **Comments.** Someone has to moderate them.
 - **Full-text poems.** See above — reversible whenever you want.

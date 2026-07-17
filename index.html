@@ -31,7 +31,7 @@
     <a href="#poems">Poems</a>
     <a href="#book">The&nbsp;book</a>
     <a href="#about">About</a>
-    <a class="btn-ghost" href="https://books.friesenpress.com/store/title/119734000577049719/PJ-Starling-I-came-to-be-free" target="_blank" rel="noopener">Buy</a>
+    <a class="btn-ghost" href="https://books.friesenpress.com/store/title/119734000577049719/PJ-Starling-I-came-to-be-free" target="_blank" rel="noopener" data-goatcounter-click="buy-header">Buy</a>
   </nav>
 </header>
 
@@ -51,12 +51,18 @@
 
     <p class="stage-poem" id="stage-poem"></p>
 
+    <!-- data-goatcounter-click: the events that answer "did anyone actually
+         share a line?" — the only metric in the plan that matters. -->
     <div class="stage-actions">
       <button class="btn" id="another" type="button">Another passage</button>
-      <button class="btn-ghost" id="native-share" type="button" hidden>Share…</button>
-      <button class="btn-ghost" id="download" type="button">Download</button>
-      <button class="btn-ghost" id="copy-text" type="button">Copy text</button>
-      <button class="btn-ghost" id="copy-link" type="button">Copy link</button>
+      <button class="btn-ghost" id="native-share" type="button" hidden
+              data-goatcounter-click="card-shared">Share…</button>
+      <button class="btn-ghost" id="download" type="button"
+              data-goatcounter-click="card-downloaded">Download</button>
+      <button class="btn-ghost" id="copy-text" type="button"
+              data-goatcounter-click="text-copied">Copy text</button>
+      <button class="btn-ghost" id="copy-link" type="button"
+              data-goatcounter-click="link-copied">Copy link</button>
     </div>
 
     <p class="stage-status" id="status" aria-live="polite"></p>
@@ -134,11 +140,11 @@
       <p>Using original metaphor and lyrical language, PJ Starling examines the deepest sorrows and the greatest triumphs of the human experience — the struggle to forgive oneself for past wrongs, the search for hope amidst the chaos of the modern world, and the desire for true intimacy.</p>
       <p>Nine poems. 42 pages. These heartfelt verses invite readers into a space where they are seen and free to feel without judgment.</p>
       <ul class="buy-list">
-        <li><a class="btn" href="https://books.friesenpress.com/store/title/119734000577049719/PJ-Starling-I-came-to-be-free" target="_blank" rel="noopener">FriesenPress <em>— paperback, hardcover, eBook</em></a></li>
-        <li><a class="btn-ghost" href="https://itunes.apple.com/us/book/isbn9781038372260" target="_blank" rel="noopener">Apple Books</a></li>
-        <li><a class="btn-ghost" href="https://www.kobo.com/search?q=9781038372260" target="_blank" rel="noopener">Kobo</a></li>
-        <li><a class="btn-ghost" href="https://play.google.com/store/search?q=9781038372260&amp;c=books" target="_blank" rel="noopener">Google Play</a></li>
-        <li><a class="btn-ghost" href="https://www.barnesandnoble.com/search?q=I%20came%20to%20be%20free+PJ%20Starling&amp;attributes.mfield_bnb__parentFormat=eBook" target="_blank" rel="noopener">Nook</a></li>
+        <li><a class="btn" href="https://books.friesenpress.com/store/title/119734000577049719/PJ-Starling-I-came-to-be-free" target="_blank" rel="noopener" data-goatcounter-click="buy-friesenpress">FriesenPress <em>— paperback, hardcover, eBook</em></a></li>
+        <li><a class="btn-ghost" href="https://itunes.apple.com/us/book/isbn9781038372260" target="_blank" rel="noopener" data-goatcounter-click="buy-apple">Apple Books</a></li>
+        <li><a class="btn-ghost" href="https://www.kobo.com/search?q=9781038372260" target="_blank" rel="noopener" data-goatcounter-click="buy-kobo">Kobo</a></li>
+        <li><a class="btn-ghost" href="https://play.google.com/store/search?q=9781038372260&amp;c=books" target="_blank" rel="noopener" data-goatcounter-click="buy-google">Google Play</a></li>
+        <li><a class="btn-ghost" href="https://www.barnesandnoble.com/search?q=I%20came%20to%20be%20free+PJ%20Starling&amp;attributes.mfield_bnb__parentFormat=eBook" target="_blank" rel="noopener" data-goatcounter-click="buy-nook">Nook</a></li>
       </ul>
       <p class="fine">Buying direct from FriesenPress supports a Canadian author most. ISBN 978-1-03-837224-6 (paperback) · 978-1-03-837225-3 (hardcover) · 978-1-03-837226-0 (eBook)</p>
     </div>
@@ -158,5 +164,13 @@
 
 <script src="assets/card.js"></script>
 <script src="assets/site.js"></script>
+
+<!-- GoatCounter: cookieless, no personal data, so no consent banner.
+     no_onload because this site is hash-routed — site.js counts each view
+     itself with the hash included, otherwise every poem and every shared
+     stanza would land on the pile marked "/". -->
+<script data-goatcounter="https://starlingpoetry.goatcounter.com/count"
+        data-goatcounter-settings='{"no_onload": true}'
+        async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>

@@ -136,10 +136,35 @@
     else render();
   }
 
+  /* ---------- analytics ----------
+     GoatCounter, cookieless. Counting is manual (no_onload in the script tag)
+     because the site is hash-routed: the default would record "/" for every
+     poem and every shared stanza, which answers nothing. The whole question is
+     WHICH lines travel — so the hash is the interesting part of the path.
+
+     count.js loads async and may not be here yet on first paint; queue until it is. */
+  var pendingCount = null;
+  function countView() {
+    var path = location.pathname + (location.hash || '');
+    if (window.goatcounter && window.goatcounter.count) {
+      window.goatcounter.count({ path: path });
+      pendingCount = null;
+    } else {
+      pendingCount = path;
+    }
+  }
+  window.addEventListener('load', function () {
+    if (pendingCount && window.goatcounter && window.goatcounter.count) {
+      window.goatcounter.count({ path: pendingCount });
+      pendingCount = null;
+    }
+  });
+
   /* Route from the hash. Called on load AND on hashchange — without the
      listener, the Back button and any in-page #poem= link change the URL and
      nothing else, which looks exactly like a broken site. */
   function route(initial) {
+    countView();
     var pm = /#poem=([\w-]+)/.exec(location.hash);
     if (pm && state.fullById[pm[1]]) {
       if (initial) draw();          // leave a passage on the stage behind them
