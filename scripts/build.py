@@ -60,6 +60,15 @@ OUT.mkdir()
 for name in ("assets", "data"):
     shutil.copytree(ROOT / name, OUT / name)
 
+# Root-level files that must keep their exact path. favicon.ico in particular:
+# browsers request /favicon.ico blind, without reading any <link> tag.
+for name in ("favicon.ico",):
+    src = ROOT / name
+    if src.exists():
+        shutil.copy2(src, OUT / name)
+    else:
+        raise SystemExit(f"missing root file: {name}")
+
 # index.html carries __BASE__ placeholders in its canonical/OG tags so the
 # deployed copy always points at itself.
 index = (ROOT / "index.html").read_text(encoding="utf-8")
@@ -88,6 +97,9 @@ PAGE = """<!DOCTYPE html>
 <meta property="og:image" content="{base}/assets/og-default.png">
 <meta property="og:url" content="{base}/q/{qid}/">
 <meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="{base}/favicon.ico" sizes="any">
+<link rel="icon" href="{base}/assets/favicon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#0b0b0d">
 <meta http-equiv="refresh" content="0; url={base}/#q={qid}">
 <link rel="stylesheet" href="{base}/assets/site.css">
 </head>
