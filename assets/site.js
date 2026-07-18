@@ -385,6 +385,7 @@
   function showPoem(pid, scroll, mode) {
     var p = state.fullById[pid];
     if (!p) return;
+    state.currentPoem = pid;   // the copy-link button reads this, not the URL
     $('#poem-index').hidden = true;
     $('#poem').hidden = false;
     $('#poem-title').textContent = p.title;
@@ -435,12 +436,13 @@
   $('#poem-back').addEventListener('click', function () { hidePoem(); });
 
   $('#copy-poem-link').addEventListener('click', function () {
-    var m = /#poem=([\w-]+)/.exec(location.hash);
-    var pid = m ? m[1] : null;
+    // Read the shown poem from state, not the URL. The URL used to carry
+    // "#poem=<id>" in the hash; since the routing refactor it's the path
+    // /poem/<id>/, so the old hash regex matched nothing and the button
+    // silently did nothing.
+    var pid = state.currentPoem;
     if (!pid) return;
     // /poem/<id>/ — a real URL with the poem's opening stanza in its OG tags.
-    // "#poem=<id>" would preview as the generic homepage, since the fragment
-    // never reaches the server.
     var url = location.origin + base() + 'poem/' + pid + '/';
     navigator.clipboard.writeText(url)
       .then(function () { $('#poem-status').textContent = 'Link copied.'; })
