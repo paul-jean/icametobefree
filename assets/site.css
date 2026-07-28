@@ -130,6 +130,26 @@ section{padding:clamp(3rem,7vw,5.5rem) clamp(1.25rem,4vw,2.5rem)}
 .section-head{max-width:var(--wrap);margin:0 auto 2.5rem;text-align:center}
 .section-head p{color:var(--cream-dim);margin:.6rem 0 0}
 
+/* ---------- the reading text (server-rendered; crawlable) ---------- */
+.read{border-bottom:1px solid var(--line)}
+.read-body{max-width:44rem;margin:0 auto}
+.read-poem{margin:0 0 3.2rem}
+.read-poem:last-child{margin-bottom:0}
+.read-poem h3{font-size:clamp(1.5rem,3.5vw,2rem)}
+.read-poem h3 a{text-decoration:none}
+.read-poem h3 a:hover{color:var(--accent)}
+.read-meta{font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:var(--cream-faint);margin:.35rem 0 1.3rem}
+.read-stanzas p{margin:0 0 1.35rem}
+.read-stanzas em{font-style:italic}
+.read-stanzas strong{font-weight:600}
+.read-passage{margin:0;border-left:2px solid var(--accent);padding-left:1.3rem;font-size:1.2rem}
+.read-passage p{margin:0}
+.read-passage footer{font-size:.9rem;color:var(--cream-dim);margin-top:1.1rem}
+.read-passage footer a{color:var(--cream)}
+.read-more{margin:1.8rem 0 0;font-size:.9rem}
+.read-more a{color:var(--cream-dim)}
+.read-more a:hover{color:var(--cream)}
+
 /* ---------- the poems ---------- */
 .poems{border-bottom:1px solid var(--line)}
 .poem-index{list-style:none;padding:0;margin:0 auto;max-width:44rem;display:grid;gap:.5rem}

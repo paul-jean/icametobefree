@@ -33,6 +33,7 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="__BASE__/assets/site.css" />
+    <!--JSONLD-->
   </head>
   <body>
     <a class="skip" href="#stage">Skip to the poem</a>
@@ -184,6 +185,13 @@
           </div>
           <p class="stage-status" id="poem-status" aria-live="polite"></p>
         </article>
+      </section>
+
+      <!-- ---------- the poems as real text, for readers and search engines.
+           build.py fills the marker per page; the app never touches this
+           section, so it's stable HTML a crawler can read on first request. -->
+      <section id="read" class="read">
+        <!--READ_FULLTEXT-->
       </section>
 
       <!-- ---------- the library, behind the link ---------- -->

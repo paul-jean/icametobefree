@@ -37,6 +37,122 @@ def strip_md(s):
     return re.sub(r"\*+", "", s)
 
 
+def md_to_html(s):
+    """The poet's *italic* / **bold** → real <em>/<strong>, HTML-escaped first.
+
+    This is what makes the baked reading text carry the same emphasis the print
+    book has, rather than stray asterisks."""
+    s = html.escape(s)
+    s = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", s)
+    s = re.sub(r"\*(.+?)\*", r"<em>\1</em>", s)
+    return s
+
+
+def stanza_html(lines):
+    return "<p>" + "<br>".join(md_to_html(l) for l in lines) + "</p>"
+
+
+def poem_article(p):
+    """One poem as crawlable HTML: a heading that links to its own page (internal
+    links help discovery) and every stanza as real text."""
+    stanzas = "".join(stanza_html(s["lines"]) for s in p["stanzas"])
+    return (
+        f'<article class="read-poem" id="read-{p["id"]}">'
+        f'<h3><a href="{BASE}/poem/{p["id"]}/">{html.escape(p["title"])}</a></h3>'
+        f'<p class="read-meta">I came to be free · page {p["page"]}</p>'
+        f'<div class="read-stanzas">{stanzas}</div>'
+        f'</article>'
+    )
+
+
+def fulltext_home():
+    arts = "".join(poem_article(p) for p in full["poems"])
+    return (
+        '<div class="section-head"><h2>The complete poems</h2>'
+        '<p>All nine, in full — the entire text of the collection.</p></div>'
+        f'<div class="read-body">{arts}</div>'
+    )
+
+
+def fulltext_poem(p):
+    return (
+        '<div class="section-head"><h2>Read the poem</h2></div>'
+        f'<div class="read-body">{poem_article(p)}</div>'
+    )
+
+
+def fulltext_passage(lines, poem):
+    body = "<br>".join(md_to_html(l) for l in lines)
+    return (
+        '<div class="read-body"><blockquote class="read-passage"><p>'
+        f'{body}</p><footer>from '
+        f'<a href="{BASE}/poem/{poem["id"]}/">“{html.escape(poem["title"])}”</a>'
+        f' — <cite>I came to be free</cite> by {html.escape(book["author"])}'
+        '</footer></blockquote>'
+        f'<p class="read-more"><a href="{BASE}/">Read the whole collection</a></p></div>'
+    )
+
+
+def person_node():
+    return {
+        "@type": "Person",
+        "@id": f"{BASE}/#author",
+        "name": book["author"],
+        "url": f"{BASE}/",
+        "sameAs": ["https://www.goodreads.com/author/show/70935940"],
+    }
+
+
+def book_node():
+    return {
+        "@type": "Book",
+        "@id": f"{BASE}/#book",
+        "name": book["title"],
+        "alternateName": f'{book["title"]}: {book["subtitle"]}',
+        "author": {"@id": f"{BASE}/#author"},
+        "inLanguage": "en",
+        "genre": "Poetry",
+        "numberOfPages": 42,
+        "datePublished": str(book["year"]),
+        "publisher": {"@type": "Organization", "name": book["publisher"]},
+        "isbn": book["isbn_paperback"],
+        "bookFormat": "https://schema.org/Paperback",
+        "image": f"{BASE}/assets/cover.jpg",
+        "url": f"{BASE}/",
+        "description": f'{book["subtitle"]} by {book["author"]}.',
+        "offers": {
+            "@type": "Offer",
+            "url": book["buy"]["friesenpress"],
+            "availability": "https://schema.org/InStock",
+        },
+        "workExample": [
+            {"@type": "Book", "bookFormat": "https://schema.org/Hardcover",
+             "isbn": book["isbn_hardcover"], "inLanguage": "en"},
+            {"@type": "Book", "bookFormat": "https://schema.org/EBook",
+             "isbn": book["isbn_ebook"], "inLanguage": "en"},
+        ],
+    }
+
+
+def website_node():
+    return {
+        "@type": "WebSite",
+        "@id": f"{BASE}/#website",
+        "url": f"{BASE}/",
+        "name": book["title"],
+        "inLanguage": "en",
+        "about": {"@id": f"{BASE}/#book"},
+    }
+
+
+def jsonld_tag(nodes):
+    """A JSON-LD block. "</" is escaped so a stanza can never close the script."""
+    payload = json.dumps({"@context": "https://schema.org", "@graph": nodes},
+                         ensure_ascii=False, separators=(",", ":"))
+    payload = payload.replace("</", "<\\/")
+    return f'<script type="application/ld+json">{payload}</script>'
+
+
 # --- per-passage OG images -------------------------------------------------
 # A shared link should preview AS the card. These are generated here, into
 # _site/, so they never bloat the repo — only the 1.9MB of fonts is committed.
@@ -113,6 +229,13 @@ for name in ("favicon.ico",):
 index = (ROOT / "index.html").read_text(encoding="utf-8")
 if "__BASE__" not in index:
     raise SystemExit("index.html has no __BASE__ placeholder — check its meta tags")
+for marker in ("<!--JSONLD-->", "<!--READ_FULLTEXT-->"):
+    if marker not in index:
+        raise SystemExit(
+            f"index.html is missing the {marker} slot — the structured data and\n"
+            "  crawlable poem text are injected there at build time. Without it the\n"
+            "  pages ship as empty shells again, which is what kept them out of Google."
+        )
 if "WEB3FORMS_ACCESS_KEY" in index:
     raise SystemExit(
         "the reading form still has the placeholder access key.\n"
@@ -120,7 +243,10 @@ if "WEB3FORMS_ACCESS_KEY" in index:
         "  and paste it into index.html. Shipping the placeholder means every reading\n"
         "  request silently vanishes — worse than having no form at all."
     )
-(OUT / "index.html").write_text(index.replace("__BASE__", BASE), encoding="utf-8")
+home = index.replace(
+    "<!--JSONLD-->", jsonld_tag([website_node(), person_node(), book_node()]))
+home = home.replace("<!--READ_FULLTEXT-->", fulltext_home())
+(OUT / "index.html").write_text(home.replace("__BASE__", BASE), encoding="utf-8")
 
 # Jekyll would otherwise ignore files/folders it doesn't like.
 (OUT / ".nojekyll").write_text("")
@@ -133,15 +259,20 @@ qdir.mkdir()
 urls = [f"{BASE}/"]
 
 
-def app_page(canonical, title, desc, og):
-    """The real app, with this passage's preview tags.
+def app_page(canonical, title, desc, og, fulltext, nodes):
+    """The real app, with this passage's preview tags, crawlable text and schema.
 
     Served at /q/<id>/ and /poem/<id>/ as well as /. That's what lets the
     address bar hold a URL people can copy straight into a chat: it's a real
     page a crawler can fetch, AND the working site. A "#q=" fragment never
     reaches the server, so it can only ever preview as the homepage — which is
-    exactly what happened when the first link went out on WhatsApp."""
-    p = index
+    exactly what happened when the first link went out on WhatsApp.
+
+    `fulltext` is the passage/poem as real HTML and `nodes` the JSON-LD graph:
+    without them each of the 200+ pages is a byte-identical shell distinguished
+    only by meta tags, which reads to a crawler as thin duplicate content."""
+    p = index.replace("<!--JSONLD-->", jsonld_tag(nodes))
+    p = p.replace("<!--READ_FULLTEXT-->", fulltext)
     p = p.replace('<link rel="canonical" href="__BASE__/" />',
                   f'<link rel="canonical" href="{canonical}" />')
     p = p.replace('<meta property="og:url" content="__BASE__/" />',
@@ -158,18 +289,31 @@ def app_page(canonical, title, desc, og):
                f'<meta name="description" content="{desc}" />', p, count=1)
     p = p.replace('<title>I came to be free — Poems by PJ Starling</title>',
                   f'<title>{title}</title>')
+    if "<!--JSONLD-->" in p or "<!--READ_FULLTEXT-->" in p:
+        raise SystemExit(f"app_page left a marker unfilled for {canonical}")
     return p.replace("__BASE__", BASE)
 
 
-def write_quote_page(qid, lines, poem_title):
+def write_quote_page(qid, lines, poem):
     og = og_for(qid, lines)            # the card itself, as the preview image
     plain = [strip_md(l) for l in lines]
     canonical = f"{BASE}/q/{qid}/"
+    passage = {
+        "@type": "CreativeWork",
+        "@id": f"{canonical}#passage",
+        "url": canonical,
+        "isPartOf": {"@id": f"{BASE}/#book"},
+        "author": {"@id": f"{BASE}/#author"},
+        "inLanguage": "en",
+        "text": "\n".join(plain),
+    }
     page = app_page(
         canonical,
         html.escape(f"“{plain[0]}…” — {book['author']}"),
         html.escape(" / ".join(plain)),
         og,
+        fulltext_passage(lines, poem),
+        [passage, book_node(), person_node()],
     )
     d = qdir / qid
     d.mkdir(parents=True, exist_ok=True)
@@ -179,7 +323,7 @@ def write_quote_page(qid, lines, poem_title):
 
 # the curated passages (their ids are already in the wild — never rename)
 for q in data["quotes"]:
-    write_quote_page(q["id"], q["lines"], poems[q["poem"]]["title"])
+    write_quote_page(q["id"], q["lines"], poems[q["poem"]])
 
 # every stanza in the book, so a reader can share the one that got them
 seen = {q["id"] for q in data["quotes"]}
@@ -187,7 +331,7 @@ for p in full["poems"]:
     for s in p["stanzas"]:
         if s["id"] in seen:
             raise SystemExit(f"stanza id collides with a curated quote id: {s['id']}")
-        write_quote_page(s["id"], s["lines"], p["title"])
+        write_quote_page(s["id"], s["lines"], p)
 
 # ---- one page per poem: the app, with the poem's preview tags -------------
 pdir = OUT / "poem"
@@ -196,11 +340,25 @@ for p in full["poems"]:
     first = [strip_md(l) for l in p["stanzas"][0]["lines"]]
     og = og_for("poem-" + p["id"], p["stanzas"][0]["lines"])
     canonical = f"{BASE}/poem/{p['id']}/"
+    poem_text = "\n\n".join(
+        "\n".join(strip_md(l) for l in s["lines"]) for s in p["stanzas"])
+    poem_work = {
+        "@type": "CreativeWork",
+        "@id": f"{canonical}#poem",
+        "name": p["title"],
+        "url": canonical,
+        "isPartOf": {"@id": f"{BASE}/#book"},
+        "author": {"@id": f"{BASE}/#author"},
+        "inLanguage": "en",
+        "text": poem_text,
+    }
     page = app_page(
         canonical,
         html.escape(f"{p['title']} — {book['author']}"),
         html.escape(" / ".join(first)),
         og,
+        fulltext_poem(p),
+        [poem_work, book_node(), person_node()],
     )
     d = pdir / p["id"]
     d.mkdir()
