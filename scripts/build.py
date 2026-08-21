@@ -99,6 +99,7 @@ def person_node():
         "@id": f"{BASE}/#author",
         "name": book["author"],
         "url": f"{BASE}/",
+        "email": "readings@starlingpoetry.xyz",
         "sameAs": ["https://www.goodreads.com/author/show/70935940"],
     }
 
