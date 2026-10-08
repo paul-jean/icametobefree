@@ -258,6 +258,8 @@ section{padding:clamp(3rem,7vw,5.5rem) clamp(1.25rem,4vw,2.5rem)}
 .book-copy h2{margin-bottom:1rem}
 .buy-list{list-style:none;padding:0;margin:1.8rem 0 1.4rem;display:flex;flex-wrap:wrap;gap:.6rem}
 .buy-list a{white-space:nowrap}
+.book-copy .book-shop{margin-top:1.6rem;padding-top:1.2rem;border-top:1px solid var(--line)}
+.book-shop a{color:var(--cream);white-space:nowrap}
 
 /* ---------- about ---------- */
 .about{max-width:60ch;margin:0 auto;text-align:center}
